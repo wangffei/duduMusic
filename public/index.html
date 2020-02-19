@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>嘟嘟音乐网站</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+	<script src="./js/vue.js"></script>
+	<script type="text/javascript" src="./js/jquery.js"></script>
+	<script type="text/javascript" src="./js/router.js"></script>
+	<script src="./js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="./js/player.js"></script>
+	<script src="./js/musiclist.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+</head>
+<body>
+	<div id="bg">
+		<img src="./img/partedclouds.jpg" alt="" />
+	</div>
+	<div id="singer_bg" style="position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:-5;">
+		<img id="singer_bg_img" src="https:\/\/y.gtimg.cn\/music\/photo_new\/T002R300x300M000001fmWDH4I0aBK.jpg?max_age=2592000" style="width:100%;height:100%;" />
+	</div>
+	<div id="app" >
+		<div id="app_top">
+			嘟嘟音乐网站
+		</div>
+		<div id="panel">
+			<router-view></router-view>
+		</div>
+		<audio src="" id="audio" src="" autobuffer style="display:hidden;"></audio>
+	</div>
+	<audio id="audio_test" src="" style="display:hidden;"></audio>
+</body>
+<script type="text/x-template" id="home">
+	<div>
+		<div id="panel_top" :style="{height:(height - 80)/2+'px'}" >
+			<div class="panel_top_contain" >
+				<div style="width:500px;height:200px;font-size:15px;color:white;position:absolute;right:20px;">嘟嘟音乐欢迎您的到来，本平台为您整合各大音乐平台资源，让您可以仅仅通过我们的平台听到就能够享受各大音乐网站的音乐，并且我们提供一套简便而舒适的ui，让您可以充分放松自己</div>
+				<div class="panel_item" style="position:absolute;bottom:0px;width:128px;">
+					<div @click="go('music')" style="width:128px;height:64px;background:url('./img/music.png') 0px 0px;cursor:pointer;"></div>
+				</div>
+				<div class="panel_item" style="position:absolute;bottom:0px;width:128px;" :style="{left:((width*0.8 - 512)/3+128+0.1*width)+'px'}">
+					<div @click="go('album')" style="width:128px;height:64px;background:url('./img/zhuanji.png') 0px 0px;cursor:pointer;"></div>
+				</div>
+				<div class="panel_item" style="position:absolute;bottom:0px;width:128px;" :style="{left:(2*(width*0.8 - 512)/3+256+0.1*width)+'px'}">
+					<div @click="go('hot')" style="width:128px;height:64px;background:url('./img/hot.png') 0px 0px;cursor:pointer;"></div>
+				</div>
+				<div class="panel_item" style="position:absolute;bottom:0px;width:128px;" :style="{left:(3*(width*0.8 - 512)/3+384+0.1*width)+'px'}">
+					<div @click="go('search')" style="width:128px;height:64px;background:url('./img/search.png') 0px 0px;cursor:pointer;"></div>
+				</div>
+			</div>
+		</div>
+		<div id="panel_bottom" :style="{height:(height - 80)/2+'px'}" >
+			<div class="panel_top_contain" >
+				<div class="panel_item panel_item_bottom" style="position:absolute;top:0px;width:128px;">
+					<div @click="go('music')" style="width:128px;height:64px;background:url('./img/music.png') 0px 64px;cursor:pointer;"></div>
+					<div @click="go('music')" class="panel_item_title">我的音乐</div>
+				</div>
+				<div class="panel_item panel_item_bottom" style="position:absolute;top:0px;width:128px;" :style="{left:((width*0.8 - 512)/3+128+0.1*width)+'px'}">
+					<div @click="go('album')" style="width:128px;height:64px;background:url('./img/zhuanji.png') 0px 64px;cursor:pointer;"></div>
+					<div @click="go('album')" class="panel_item_title">热门榜单</div>
+				</div>
+				<div class="panel_item panel_item_bottom" style="position:absolute;top:0px;width:128px;" :style="{left:(2*(width*0.8 - 512)/3+256+0.1*width)+'px'}">
+					<div @click="go('hot')" style="width:128px;height:64px;background:url('./img/hot.png') 0px 64px;cursor:pointer;"></div>
+					<div @click="go('hot')" class="panel_item_title">热门歌曲</div>
+				</div>
+				<div class="panel_item panel_item_bottom" style="position:absolute;top:0px;width:128px;" :style="{left:(3*(width*0.8 - 512)/3+384+0.1*width)+'px'}">
+					<div @click="go('search')" style="width:128px;height:64px;background:url('./img/search.png') 0px 64px;cursor:pointer;"></div>
+					<div @click="go('search')" class="panel_item_title">搜索</div>
+				</div>
+				<div style="position:absolute;bottom:20px;text-align:center;color:white;width:80%;font-size:13px;">@copyright(c) 2019 嘟嘟音乐有限公司</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="music">
+	<div style="width:85%;height:100%;margin:0px auto;">
+		<div id="music_main" style="width:100%;height:100%;display:flex;" :style="{height:(height - 160)+'px'}">
+			<div ref="music_main_left" class="music_main_left" style="width:800px;overflow:hidden;border-radius:5px;" :style="{height:(height - 160)+'px'}">
+			</div>
+			<div ref="music_main_right" class="music_main_right" style="flex-grow:1;height:100%;">
+				<div style="width:200px;float:right;height:100%;display:flex;flex-direction:column;">
+					<div style="width:200px;height:180px;background:url('./img/album_cover_player.png');">
+						<img id="singer_img" src="https:\/\/y.gtimg.cn\/music\/photo_new\/T002R300x300M000001fmWDH4I0aBK.jpg?max_age=2592000" style="width:180px;height:100%;" />
+					</div>
+					<div ref="lrc_panel" id="lrc_panel" style="width:100%;border-radius:5px;overflow:hidden;margin-top:10px;" :style="{height:(height - 350)+'px'}">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="music_bottom" >
+			<div style="width:85%;">
+				
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="album">
+	<div style="width:1130px;height:100%;margin:0px auto;">
+		<div id="albumList" style="width:100%;display:flex;flex-wrap:wrap;background:url('./img/bg_empty1.png');border-radius:4px;" :style="{height:(height - 160) + 'px'}">
+			<div style="width:100%;font-size:18px;color:white;text-align:center;height:40px;line-height:40px;">热门榜单</div>
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="list">
+	<div style="width:1130px;height:100%;margin:0px auto;">
+		<div style="width:100%;display:flex;background:url('./img/bg_empty1.png');border-radius:4px;" :style="{height:(height - 160) + 'px'}">
+			<div class="list_left" style="width:330px;border-right:0.5px solid #353333;">
+				<div style="width:200px;height:180px;background:url('./img/album_cover_player.png');margin:20px auto;">
+					<img :src="img" style="width:180px;height:180px;" />
+				</div>
+				<div style="width:180px;height:30px;line-height:30px;color:white;margin-left:65px;text-align:center;-ms-filter: 'progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=0, Color=#CFCDC2)';text-shadow: 0 0 24px #CFCDC2;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=135, Color=#CFCDC2);">{{name}}</div>
+			</div>
+			<div ref="list_right" id="list_right" style="flex-grow:1;height:100%;"></div>
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="hot">
+	<div style="width:1130px;height:100%;margin:0px auto;">
+		<div style="width:100%;display:flex;background:url('./img/bg_empty1.png');border-radius:4px;" :style="{height:(height - 160) + 'px'}">
+			<div class="list_left" style="width:330px;border-right:0.5px solid #353333;">
+				<div style="width:200px;height:180px;background:url('./img/album_cover_player.png');margin:20px auto;">
+					<img :src="img" style="width:180px;height:180px;" />
+				</div>
+				<div style="width:180px;height:30px;line-height:30px;color:white;margin-left:65px;text-align:center;-ms-filter: 'progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=0, Color=#CFCDC2)';text-shadow: 0 0 24px #CFCDC2;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=135, Color=#CFCDC2);">{{name}}</div>
+			</div>
+			<div ref="list_right" id="list_right" style="flex-grow:1;height:100%;"></div>
+		</div>
+	</div>
+</script>
+<script type="text/x-template" id="search">
+	<div style="width:1130px;height:100%;margin:0px auto;">
+		<div style="width:100%;display:flex;background:url('./img/bg_empty1.png');border-radius:4px;" :style="{height:(height - 160) + 'px'}">
+			<div class="search_left" style="width:330px;border-right:0.5px solid #353333;">
+				<div style="width:200px;height:180px;background:url('./img/album_cover_player.png');margin:20px auto;">
+					<img :src="img" style="width:180px;height:180px;" />
+				</div>
+				<div style="width:180px;height:30px;line-height:30px;color:white;margin-left:65px;text-align:center;-ms-filter: 'progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=0, Color=#CFCDC2)';text-shadow: 0 0 24px #CFCDC2;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=24, Direction=135, Color=#CFCDC2);">{{name}}</div>
+			</div>
+			<div id="list_right" style="flex-grow:1;height:100%;display:flex;flex-direction:column;">
+				<div id="search" style="width:100%;height:80px;overflow:hidden;border-bottom:0.2px solid #353333;">
+					<div style="width:500px;height:30px;margin:25px auto;display:flex;">
+						<div id="search_input" style="width:440px;height:30px;"><input v-model="key" type="text" style="width:100%;height:30px;background:url('./img/bg_empty.png');border:0px;text-align:center;color:white;border-bottom-left-radius:5px;border-top-left-radius:5px;" placeholder="请输入检索词" /></div>
+						<div @click="search()" style="width:60px;height:30px;font-size:14px;line-height:30px;text-align:center;background:gray;border-top-right-radius:5px;border-bottom-right-radius:5px;cursor:pointer;">搜索</div>
+					</div>
+				</div>
+				<div id="search_panel" ref="search_panel" style="width:100%;" :style="{height:(height - 160 - 80) + 'px'}"></div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+	var width = $(document).width()
+	var height = $(document).height()
+
+	var player = new Player(document.getElementById("audio") , {}) 
+	var storage = window.localStorage["list"]
+	if(storage){
+		storage = JSON.parse(storage)
+		for(var i in storage){
+			player.add(storage[i])
+		}
+	}
+
+	const Home = Vue.component('home', {
+	  template: '#home' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height 
+	  	}
+	  } ,
+	  methods:{
+	  	go(msg){
+	  		$("#panel_top").css("bottom" , height/2+"px")
+			$("#panel_bottom").css("top" , height/2+"px")
+			var self = this ;
+			window.setTimeout(function(){
+				self.$router.push(msg)
+			} , 200)
+	  	}
+	  }
+	})
+
+	const List = Vue.component('list', {
+	  template: '#list' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height ,
+	  		id:"" ,
+	  		img:"" ,
+	  		name:"" ,
+	  		list:[]
+	  	}
+	  } ,
+	  created(){
+	  	var self = this
+	  	this.name = this.$route.query["name"]
+	  	this.id = this.$route.query["id"]
+	  	this.img = this.$route.query["img"]
+	  	
+	  	this.$nextTick(function(){
+	  		// 请求歌曲列表
+		  	$.ajax({
+		  		url:"/api/album/"+self.id ,
+		  		success:function(res){
+		  			self.list = res.data
+		  			var d = res.data 
+		  			var arr = []
+		  			for(var i in d){
+		  				var obj = {}
+		  				obj.name = d[i].name
+						obj.album = d[i].album
+	        			obj.time = d[i].artist[0]
+	        			arr.push(obj)
+		  			}
+		  			var musicList = new MusicList(self.$refs["list_right"] , {})
+		  			musicList.add(arr)
+		  			musicList.on("click" , self.select)
+		  		}
+		  	})
+	  	})
+	  },
+	  methods:{
+	  	select:function(obj){
+	  		var d = this.list[obj.index*1 - 1]
+	  		console.log(d)
+	  		$.ajax({
+	  			url:"/api/music/"+d["id"] ,
+	  			success:function(res){
+	  				var data = {}
+					data.play_url = res.data.play_url
+					data.img = res.data.img
+					data.lrc = res.data.lyric
+					data.songName = res.data.songName
+					data.singer = res.data.singer 
+					data.album = res.data.album
+					player.addAndPlay(data)
+	  			}
+	  		})
+	  	}
+	  }
+	})
+
+	const Hot = Vue.component('hot', {
+	  template: '#hot' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height ,
+	  		img:"./img/player_cover.png" ,
+	  		name:"嘟嘟热榜" ,
+	  		list:[]
+	  	}
+	  } ,
+	  created(){
+	  	var self = this
+	  	
+	  	this.$nextTick(function(){
+	  		// 请求歌曲列表
+		  	$.ajax({
+		  		url:"/api/hot/" ,
+		  		success:function(res){
+		  			self.list = res.data
+		  			var d = res.data 
+		  			var arr = []
+		  			for(var i in d){
+		  				var obj = {}
+		  				obj.name = d[i].songName
+						obj.album = d[i].album
+	        			obj.time = d[i].singer
+	        			arr.push(obj)
+		  			}
+		  			var musicList = new MusicList(self.$refs["list_right"] , {})
+		  			musicList.add(arr)
+		  			musicList.on("click" , self.select)
+		  		}
+		  	})
+	  	})
+	  },
+	  methods:{
+	  	select:function(obj){
+	  		var d = this.list[obj.index*1 - 1]
+	  		console.log(d)
+	  		$.ajax({
+	  			url:"/api/music/"+d["id"] ,
+	  			success:function(res){
+	  				var data = {}
+					data.play_url = res.data.play_url
+					data.img = res.data.img
+					data.lrc = res.data.lyric
+					data.songName = res.data.songName
+					data.singer = res.data.singer 
+					data.album = res.data.album
+					player.addAndPlay(data)
+	  			}
+	  		})
+	  	}
+	  }
+	})
+
+	const Search = Vue.component('search', {
+	  template: '#search' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height ,
+	  		img:"./img/player_cover.png" ,
+	  		name:"嘟嘟搜索" ,
+	  		list:[] ,
+	  		key:"" ,
+	  		scroll:Object ,
+	  		page:1
+	  	}
+	  } ,
+	  created(){
+	  	var self = this
+	  	this.$nextTick(function(){
+	  		self.scroll = new MusicList(this.$refs["search_panel"] , {})
+	  		self.scroll.on("click" , self.select)
+	  		self.scroll.on("scroll" , self.onScroll)
+	  	})
+	  },
+	  methods:{
+	  	select:function(obj){
+	  		var d = this.list[obj.index*1 - 1]
+	  		$.ajax({
+	  			url:"/api/music/"+d["id"] ,
+	  			success:function(res){
+	  				var data = {}
+					data.play_url = res.data.play_url
+					data.img = res.data.img
+					data.lrc = res.data.lyric
+					data.songName = res.data.songName
+					data.singer = res.data.singer 
+					data.album = res.data.album
+					player.addAndPlay(data)
+	  			}
+	  		})
+	  	} ,
+	  	onScroll:function(obj){
+	  		this.page = this.page + 1
+	  		var self = this 
+	  		$.ajax({
+	  			url:"/api/search/"+self.key+"/"+self.page ,
+	  			success:function(res){
+	  				self.page = 1 
+	  				self.list = self.list.concat(res.data)
+	  				var d = res.data 
+		  			var arr = []
+		  			for(var i in d){
+		  				var obj = {}
+		  				obj.name = d[i].name
+						obj.album = d[i].album
+	        			obj.time = d[i].artist[0]
+	        			arr.push(obj)
+		  			}
+		  			self.scroll.add(arr)
+	  			}
+	  		})
+	  	},
+	  	search:function(){
+	  		var self = this 
+	  		this.scroll.clear()
+	  		$.ajax({
+	  			url:"/api/search/"+self.key+"/"+1 ,
+	  			success:function(res){
+	  				self.page = 1 
+	  				self.list = res.data
+	  				var d = res.data 
+		  			var arr = []
+		  			for(var i in d){
+		  				var obj = {}
+		  				obj.name = d[i].name
+						obj.album = d[i].album
+	        			obj.time = d[i].artist[0]
+	        			arr.push(obj)
+		  			}
+		  			self.scroll.add(arr)
+	  			}
+	  		})
+	  	}
+	  }
+	})
+
+	const Album = Vue.component('album', {
+	  template: '#album' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height 
+	  	}
+	  } ,
+	  created(){
+	  	var self = this ;
+	  	this.$nextTick(function(){
+	  		$.ajax({
+		  		url:"/api/albums" ,
+		  		success:function(res){
+		  			var d = res.data
+		  			var div = $("<div style='display:flex;width:100%;'></div>")
+		  			for(var i in d){
+		  				var temp = $("<div onclick='album_select('"+d[i].id+"')' style='width:160px;height:180px;margin:0px 30px 30px;cursor:pointer;' albuminfo='{\"id\":"+d[i].id+" , \"img\":\""+d[i].img+"\" , \"name\":\""+d[i].name+"\"}'><img style='width:100%;height:160px;' src='"+d[i].img+"' /><div style='width:160px;color:white;text-align:center;height:20px;line-height:20px;'>"+d[i].name+"</div></div>") ;
+		  				div.append(temp)
+		  				temp.click(function(){
+		  					var info = JSON.parse($(this).attr("albuminfo"))
+		  					self.$router.push("list?id="+info.id+"&img="+info.img+"&name="+info.name)
+		  				})
+		  				if(i*1 != 0 && (i*1+1) % 5 == 0){
+		  					$("#albumList").append(div)
+		  					div = $("<div style='display:flex;width:100%;'></div>")
+		  				}
+		  			}
+		  			$("#albumList").append(div)
+		  			$("#albumList").mCustomScrollbar({
+						scrollButtons:{
+							enable:true
+						} ,
+						scrollInertia:1000
+					});
+		  		}
+		  	})
+	  	})
+	  } ,
+	  methods:{
+	  }
+	})
+
+	const Music = Vue.component('music', {
+	  template: '#music' ,
+	  data:function(){
+	  	return{
+	  		width:width ,
+	  		height:height ,
+	  		music:Object
+	  	} 
+	  } ,
+	  created:function(){
+	  	var self = this ;
+	  	this.$nextTick(function(){
+	  		self.music = new MusicList(this.$refs.music_main_left , {}) ;
+			$("#lrc_panel").mCustomScrollbar({
+				scrollButtons:{
+					enable:true
+				} ,
+				autoHideScrollbar:true
+			});
+			//console.log(this.item_click)
+			var arr = []
+			var d = player.array 
+			for(var i in d){
+				var obj = {}
+				obj.name = d[i].songName
+				obj.album = d[i].album
+    			obj.time = d[i].singer
+    			arr.push(obj)
+			}
+			self.music.add(arr)
+			self.music.on("click" , this.item_click)
+			// 初始化歌词
+			player.lrc_init(player.array[player.current["index"] - 1].lrc)
+	  	})
+  	  } ,
+  	  methods:{
+  	  	item_click(obj){
+  	  		player.play(obj.index*1)
+  	  	}
+  	  }
+	})
+
+	const routes = [
+		{path:"/" , component:Home} ,
+		{path:"/music" , component:Music} ,
+		{path:"/album" , component:Album,} ,
+		{path:"/list" , name:"list" , component:List } ,
+		{path:"/hot"  , component:Hot } ,
+		{path:"/search"  , component:Search }
+	]
+
+	const router = new VueRouter({
+	  	routes // (缩写) 相当于 routes: routes
+	})
+
+	var app = new Vue({
+		el:"#app" ,
+		data:{
+			width:width ,
+			height:height 
+		},
+		methods:{
+			
+		} ,
+		router
+	})
+
+	function test(){
+		var el = document.getElementById("audio_test")
+		el.src = ""
+		el.play()
+	}
+</script>
+</html>
