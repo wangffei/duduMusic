@@ -18,9 +18,9 @@
    		$result = json_decode($fileData , true) ;
    		// 1.请求音乐播放地址
    		$api = new MetingMusic("netease") ;
-		$song = $api -> format(true) -> url($result["data"]["id"]) ;
-		$song = json_decode($song , true)["url"] ;
-		$result["data"]["play_url"] = $song ;
+   		$song = $api -> format(true) -> url($result["data"]["id"]) ;
+   		$song = json_decode($song , true)["url"] ;
+   		$result["data"]["play_url"] = $song ;
    		return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    	}
    	$api = new MetingMusic("netease") ;
@@ -101,7 +101,7 @@
    public function test1()
    {
    	// 123
-   	$student = DB::select("select * from hot");
+   	$student = DB::select("select * from users where username=$user and password=$pwd limit 1");
    	$result = Array("code" => 200, "msg" => "成功", "data" => $student);
    	return response(json_encode($result)) -> header("Content-Type", "application/json");
    }
