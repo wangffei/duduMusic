@@ -44,33 +44,22 @@
 		$addr = $request -> input("addr");
 		$birth = $request -> input("birth");
 
-		$register_user = null;
-		$register_pwd = null;
-		$register_name = null;
+		$result = null ;
 		if (is_null($username))
 		{
-			$register_user = Array("code" => 500, "msg" => "用户名不能为空!!!", "count" => 1, "data" => "");
+			$result = Array("code" => 500, "msg" => "用户名不能为空!!!", "count" => 1, "data" => "");
 		}
 		if (is_null($password))
 		{
-			$register_pwd = Array("code" => 500, "msg" => "密码不能为空!!!", "count" => 1, "data" => "");
+			$result = Array("code" => 500, "msg" => "密码不能为空!!!", "count" => 1, "data" => "");
 		}
 		if (is_null($name))
 		{
-			$register_name = Array("code" => 500, "msg" => "昵称不能为空!!!", "count" => 1, "data" => "");
+			$result = Array("code" => 500, "msg" => "昵称不能为空!!!", "count" => 1, "data" => "");
 		}
 
-		if (empty($register_user))
-		{
-			return response(json_encode($register_user)) -> header("Content-Type", "application/json");
-		}
-		else if(empty($register_pwd))
-		{
-			return response(json_encode($register_pwd)) -> header("Content-Type", "application/json");
-		}
-		else if(empty($register_name))
-		{
-			return response(json_encode($register_name)) -> header("Content-Type", "application/json");
+		if($result != null){
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 		else
 		{
