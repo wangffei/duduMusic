@@ -3,7 +3,7 @@
 		this.el = el ;
 		this.array = []
 		this.lrcPanel = options.lrc == undefined ? "lrc_panel" : options.lrc ;
-		this.current = {}
+		this.current = {index:1}
 		this.getArray = function(){
 			return this.array
 		}
@@ -52,29 +52,57 @@
 		this.addAndPlay = function(data){
 			for(var i in this.array){
 				if(this.array[i].songName == data.songName && this.array[i].singer == data.singer){
+					self.current["index"] = i*1
+					this.play(i*1+1)
 					return
 				}
 			}
 			this.storage(data)
 			this.array.push(data)
-			this.el.src = data.play_url
 			try{
 				document.getElementById("singer_bg_img").src = data.img
 				document.getElementById("singer_img").src = data.img
 			}catch(err){
 				console.log("歌词上方图片设置失败")
 			}
+			this.ajax({url:"/api/playUrl/"+data["id"] , async:false , dataType:"json" , callback:{success:function(res){self.el.src = res.data.url ;}}})
 			this.el.play()
 			self.current["index"] = this.array.length
 		}
 		this.storage = function(data){
 			var store = window.localStorage["list"]
-			if(store == undefined){
+			if(store == undefined || store == ""){
 				store = "[]"
 			}
 			store = JSON.parse(store)
 			store.push(data)
 			window.localStorage["list"] = JSON.stringify(store)
+		}
+		this.ajax = function(options){
+			var request; 
+			if (window.XMLHttpRequest) { //检查浏览器的XMLHttpRequest属性，如果为真则支持XMLHttpRequest
+				// IE7+, Firefox, Chrome, Opera, Safari 浏览器支持XMLHttpRequest 
+				request=new XMLHttpRequest(); 
+			} else { 
+				// IE6, IE5 浏览器使用ActiveXObject
+				request=new ActiveXObject("Microsoft.XMLHTTP"); 
+			}
+			request.open(options["method"] ? options["method"] : "GET" , options["url"] , options["async"] ? options["async"] : false)
+			//request.setRequestHeader("Content-type" , "application/json")
+			request.onreadystatechange = function(){
+				if(request.readyState == 4 && request.status == 200){
+					if(options["callback"] != undefined){
+						var result = ""
+						if(options["dataType"] == "json"){
+							result = eval("("+request.responseText+")")
+						}else{
+							result = request.responseText
+						}
+						options["callback"]["success"](result)
+					}
+				}
+			}
+			request.send()
 		}
 		this.add = function(data){
 			for(var i in this.array){
@@ -86,12 +114,16 @@
 			this.array.push(data)
 		}
 		this.play = function(index){
-			self.current["index"] = index
-			this.el.src = this.array[index-1].play_url
-			this.lrc_init(this.array[index-1].lrc)
+			try{
+				self.current["index"] = index
+				this.ajax({url:"/api/playUrl/"+self.array[index*1 - 1]["id"] , dataType:"json" , async:false , callback:{success:function(res){self.el.src = res.data.url ;}}})
+				this.lrc_init(this.array[index-1].lrc)
+			}catch(err){} 
 			this.el.play()
-			document.getElementById("singer_bg_img").src = this.array[index-1].img
-			document.getElementById("singer_img").src = this.array[index-1].img
+			try{
+				document.getElementById("singer_bg_img").src = this.array[index-1].img
+				document.getElementById("singer_img").src = this.array[index-1].img
+			}catch(err){}
 		}
 		this.lrc_init = function(lrc){
 			var panel = document.getElementById(this.lrcPanel).querySelector(".mCSB_container")
@@ -126,7 +158,6 @@
 				data[arr[i]]["el"] = temp
 			}
 			this.current.lrc = data
-			console.log(data)
 			$("#lrc_panel").mCustomScrollbar("update")
 		}
 		this.getKey = function(index , json){

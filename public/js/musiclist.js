@@ -7,9 +7,8 @@
 	this.width = options.width == undefined ? this.el.offsetWidth : options.width
 	//this.el.style.background = "url('./img/bg_empty1.png')"
 	this.ul = document.createElement("ul")
+	this.ul.setAttribute("class" , "music_list_panel")
 	var self = this ;
-	var height = options.height == undefined ? "100%" : options.height+"px"
-	this.ul.style.cssText = "width:auto;list-style:none;padding-left:10px;padding-right:10px;height:"+height+";"
 	var div1 = document.createElement("div")
 	div1.setAttribute("class" , "index")
 	var div2 = document.createElement("div")
@@ -22,12 +21,12 @@
 	div4.setAttribute("class" , "time")
 	div4.innerHTML = "歌手"
 	var li = document.createElement("li")
-	li.style.cssText = "width:100%;height:40px;border-bottom:0.2px solid #8c8282;display:flex;"
+	li.setAttribute("class" , "music_list_item")
 	li.appendChild(div1)
 	li.appendChild(div2)
 	li.appendChild(div3)
 	li.appendChild(div4)
-	this.ul.append(li)
+	this.ul.appendChild(li)
 	this.ul.setAttribute("id" , "music_list")
 	this.el.appendChild(this.ul)
 	this.on = function(source , fun){
@@ -74,7 +73,7 @@
 			div_singer.innerHTML = data[i].album
 			div_time.innerHTML = data[i].time
 			var li = document.createElement("li")
-			li.style.cssText = "width:100%;height:40px;border-bottom:0.2px solid #8c8282;display:flex;cursor:pointer;"
+			li.setAttribute("class" , "music_list_item")
 			var obj = {"index":index , "row":{"name":data[i].name , "singer":data[i].singer , "time":data[i].time}}
 			li.setAttribute("info" , JSON.stringify(obj))
 			li.onclick = function(event){

@@ -101,6 +101,7 @@
 
    public function test1()
    {
+	// 123
 	$student = DB::select("select * from hot");
 	$result = Array("code" => 200, "msg" => "成功", "data" => $student);
 	return response(json_encode($result)) -> header("Content-Type", "application/json");
