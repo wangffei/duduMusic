@@ -27,3 +27,5 @@ Route::get("/info", function (Request $request) {
 });
 Route::get('/test', "Api\HelloController@test1");
 Route::get('/my_music', "Api\AdminController@data");
+Route::get('/login', "Api\AdminController@login1");
+Route::get('/register', "Api\AdminController@register1");
