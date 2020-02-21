@@ -14,11 +14,16 @@ html,body{width:100%;height: 100%;list-style: none;}
     background:url("../img/bg_empty.png");
 }
 #app_top{
-	color:#e6e6e6;line-height:50px;font-size:30px;margin:15px 20px;height:50px;cursor:pointer;
+	color:#e6e6e6;line-height:50px;font-size:30px;margin:15px 20px;height:50px;cursor:pointer;width:500px;float:left;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=13, Direction=0, Color=#A1A097)";/*IE 8*/
 	text-shadow: 0 0 13px #A1A097;/* FF3.5+, Opera 9+, Saf1+, Chrome, IE10 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=13, Direction=135, Color=#A1A097); 
 }
+
+#login{
+	width:100px;height:50px;float:right;margin-top:20px;
+}
+
 #panel{
 	flex-grow:1;width:100%;overflow:hidden;
 }
@@ -184,4 +189,19 @@ html,body{width:100%;height: 100%;list-style: none;}
 
 .music_main_left{
 	width:70%;overflow:hidden;border-radius:5px;
+}
+
+.btn{
+	cursor:pointer;border-radius:5px;color:white;text-align:center;
+	background: -moz-linear-gradient(0deg, #4E7D0E 55%, #7DB72F 100%);/* FF3.6+ */
+	background: -webkit-gradient(linear, 0deg, color-stop(55%, 4E7D0E), color-stop(100%, 7DB72F));/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(0deg, #4E7D0E 55%, #7DB72F 100%);/* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(0deg, #4E7D0E 55%, #7DB72F 100%);/* Opera 11.10+ */
+	background: -ms-linear-gradient(0deg, #4E7D0E 55%, #7DB72F 100%);/* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1301FE', endColorstr='#F4F60C', GradientType='1'); /* for IE */
+	background: linear-gradient(0deg, #4E7D0E 55%, #7DB72F 100%);/* W3C */
+}
+
+.btn:hover{
+	opacity:0.9;
 }
