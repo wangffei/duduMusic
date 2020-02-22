@@ -6,6 +6,7 @@
 	<title>嘟嘟音乐网站</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+	<link href="./layui/layui/css/layui.css" rel="stylesheet" />
 	<script src="./js/vue.js"></script>
 	<script type="text/javascript" src="./js/jquery.js"></script>
 	<script type="text/javascript" src="./js/router.js"></script>
@@ -74,9 +75,11 @@
 <script type="text/javascript" src="./js/music.template.js"></script>
 <script type="text/javascript" src="./js/lrc.template.js"></script>
 <script type="text/javascript" src="./js/version.js"></script>
+<script type="text/javascript" src="./layui/layui/layui.all.js"></script>
 <script type="text/javascript">
 	var width = $(document).width()
 	var height = $(document).height()
+	var layer = layui.layer ;
 
 	var player = new Player(document.getElementById("audio") , {}) 
 	var storage = window.localStorage["list"]
@@ -174,6 +177,25 @@
 	$("#login_btn").click(function(){
 		var username = $(".username input").val()
 		var password = $(".password input").val()
+
+		if(username == "" || password == ""){
+			layer.msg("账号或者密码不能为空")
+		}
+
+		$.ajax({
+			url:"/api/login" ,
+			data:{username:username , password:password} ,
+			success:function(res){
+				if(res.code == 500){
+					layer.msg(res.msg)
+				}else{
+					
+				}
+			},
+			fail:function(){
+				layer.msg("请求失败")
+			}
+		})
 	})
 </script>
 </html>
