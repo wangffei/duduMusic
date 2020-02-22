@@ -31,7 +31,7 @@
 				嘟嘟音乐网站
 			</div>
 			<div id="login">
-				<i style="width:32px;height:32px;background:url('img/login.png');display:block;cursor:pointer;"></i>
+				<i class="login_icon" style="width:32px;height:32px;background:url('img/login.png');display:block;cursor:pointer;"></i>
 			</div>
 		</div>
 		<div id="app_top_less">
@@ -80,6 +80,36 @@
 	var width = $(document).width()
 	var height = $(document).height()
 	var layer = layui.layer ;
+
+	//读取cookies
+	function getCookie(name)
+	{
+	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	 
+	    if(arr=document.cookie.match(reg))
+	 
+	        return unescape(arr[2]);
+	    else
+	        return null;
+	}
+
+	function del(name, path) { 
+        var name = escape(name);
+        var expires = new Date(0);
+        path = (path == "") ? "" : ";path=" + path;
+        document.cookie = name + "=" + ";expires=" + expires.toUTCString() + path;
+    }
+
+	if(getCookie("username")){
+		$.ajax({
+			url:"/api/userinfo/"+getCookie("username") ,
+			success:function(res){
+				if(res.code == 200){
+					$(".login_icon").before(res.data.name)
+				}
+			}
+		})
+	}
 
 	var player = new Player(document.getElementById("audio") , {}) 
 	var storage = window.localStorage["list"]
@@ -148,11 +178,23 @@
 		}
 	}
 
-	$("#login i").click(function(){
-		$("#panel_login").css("margin-top" , (height - 350)/2 + 'px')
-		$("#panel_login").css("margin-left" , (width - 500)/2 + 'px')
-		$("#panel_login_container").css("display" , "block")
-	})
+	function init(){
+		$("#login i").click(function(){
+			$("#panel_login").css("margin-top" , (height - 350)/2 + 'px')
+			$("#panel_login").css("margin-left" , (width - 500)/2 + 'px')
+			if(!getCookie("username")){
+				$("#panel_login_container").css("display" , "block")
+			}else{
+				layer.confirm('是否要退出登录', {icon: 3, title:'警告'}, function(index){
+				  del("username") ;
+				  $(".login_icon").parent("div").html($(".login_icon"))
+				  init()
+				  layer.close(index);
+				});
+			}
+		})
+	}
+	init()
 
 	$("#panel_login_container").click(function(){
 		$("#panel_login_container").css("display" , "none")
@@ -161,18 +203,6 @@
 	$("#panel_login").click(function(event){
 		event.stopPropagation();
 	})
-
-	//读取cookies
-	function getCookie(name)
-	{
-	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	 
-	    if(arr=document.cookie.match(reg))
-	 
-	        return unescape(arr[2]);
-	    else
-	        return null;
-	}
 
 	$("#login_btn").click(function(){
 		var username = $(".username input").val()
@@ -189,7 +219,9 @@
 				if(res.code == 500){
 					layer.msg(res.msg)
 				}else{
-					
+					$("#panel_login_container").css("display" , "none")
+					var user = getCookie("username")
+					$(".login_icon").before(res.data[0].name)
 				}
 			},
 			fail:function(){

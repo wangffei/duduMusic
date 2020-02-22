@@ -45,12 +45,14 @@
    }
 
    public function albums(){
-      $list = DB::select("select mid , name , img from albums") ;
+      $list = DB::select("select id , name , img from albums") ;
    	$result = Array("code" => 200 , "msg" => "成功" , "data" => ($list)) ;
    	return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    }
 
    public function album($id){
+      $list = DB::select("select mid from albums where id=$id limit 1") ;
+      $id = $list[0]["mid"] ;
    	$filename = "./music/album".$id.".json" ;
    	if(file_exists($filename)){
    		$file = fopen($filename , "r") or die("file exception") ;
@@ -98,11 +100,12 @@
    	return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    }
 
-   public function test1()
+   public function getuserinfo($username)
    {
-   	// 123
-   	$student = DB::select("select * from users where username=$user and password=$pwd limit 1");
-   	$result = Array("code" => 200, "msg" => "成功", "data" => $student);
+   	$student = DB::select("select user,role,name from users where user='$username' limit 1");
+   	$result = Array("code" => 200, "msg" => "成功", "data" => $student[0]);
    	return response(json_encode($result)) -> header("Content-Type", "application/json");
    }
+
+
  }
