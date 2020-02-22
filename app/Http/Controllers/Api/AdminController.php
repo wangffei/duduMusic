@@ -32,7 +32,7 @@
 		{
 			$result = Array("code" => 500, "msg" => "账号或者密码错误！", "count" => 1, "data" => $admin);
 		}
-		$cookie = Cookie::make("username" , $username , 30 , $httpOnly = false) ;
+		$cookie = Cookie::make("username" , $username , $minutes = 30, $path = null, $domain = null, $secure = false, $httpOnly = false) ;
 		return response(json_encode($result)) -> header("Content-Type", "application/json") -> withCookie($cookie) ;
 	}
 
