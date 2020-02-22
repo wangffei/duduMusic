@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+      <title>新建歌单</title>
+      <link rel="stylesheet" href="../layui/layui/css/layui.css">
+  </head>
+
+  <body>
+    <form class="layui-form" action="">
+      <div class="layui-form-item">
+        <label class="layui-form-label">歌单名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="name" required lay-verify="required" placeholder="请输入歌单名" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <button type="button" class="layui-btn upload_item" id="list_img">
+          <i class="layui-icon">&#xe67c;</i>上传歌单封面
+        </button>
+      </div>
+
+      <input id="img_file" type="hidden" name="img_file"/>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+      </div>
+    </form>
+    
+    <div id="upload1" style="display:none;"></div>
+    <script src="../layui/layui/layui.all.js"></script> 
+    <script>
+    var $ = layui.jquery ;
+    layui.use('upload', function(){
+      var upload = layui.upload;
+      //执行实例
+      var uploadInst = upload.render({
+        elem: '#upload1' //绑定元素
+        ,url: '/api/upload/' //上传接口
+        ,accept:"images"
+        ,done: function(res){
+          $("#img_file").val(res.data.file)
+        }
+        ,error: function(){
+          //请求异常回调
+        }
+      });
+    });
+    $(".upload_item").click(function(){
+      if($(this).attr("id") == "list_img"){
+        document.getElementById("upload1").click()
+      }else{
+        // 报错
+      }
+    })
+    </script>
+    <script>
+    //Demo
+    layui.use('form', function(){
+      var form = layui.form;
+      
+      //监听提交
+      form.on('submit(formDemo)', function(data){
+        $.ajax({
+          url:"/api/song_list" ,
+          data:data.field ,
+          success:function(res){
+            if(res.code == 200){
+              layer.msg("成功")
+            }else{
+              layer.msg(res.msg)
+            }
+          } ,
+          fail:function(){
+            layer.msg("请求失败")
+          }
+        })
+        return false;
+      });
+    });
+    </script>
+  </body>
+</html>

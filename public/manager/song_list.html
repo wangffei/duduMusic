@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>歌单列表</title>
+    <link rel="stylesheet" href="../layui/layui/css/layui.css" media="all">
+  </head>
+  <body>
+   
+  <table id="list" lay-filter="test"></table>
+   
+  <script src="../layui/layui/layui.all.js"></script>
+  <script>
+  layui.use('table', function(){
+    var table = layui.table;
+    
+    //第一个实例
+    table.render({
+      elem: '#list'
+      ,height: 312
+      ,url: '/api/albums' //数据接口
+      ,response: {
+        //statusName: 'status' //规定数据状态的字段名称，默认：code
+        statusCode: 200 //规定成功的状态码，默认：0
+        //,msgName: 'hint' //规定状态信息的字段名称，默认：msg
+        //,countName: 'total' //规定数据总数的字段名称，默认：count
+        //,dataName: 'rows' //规定数据列表的字段名称，默认：data
+      } 
+      ,page: true //开启分页
+      ,cols: [[ //表头
+        {field: 'id', title: 'ID', width:80, fixed: 'left'}
+        ,{field: 'name', title: '歌单名', width:320}
+      ]]
+    });
+    
+  });
+  </script>
+  </body>
+</html>
