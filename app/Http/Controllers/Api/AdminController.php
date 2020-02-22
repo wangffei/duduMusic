@@ -118,6 +118,8 @@
 		$album = $request -> input("album");
 		$img_file = $request -> input("img_file");
 		$music_file = $request -> input("music_file");
+		$img = null;
+		$url = null;
 
 		// 获得移动后文件的地址并且移动文件
 		if (strrchr($img_file, '/'))
@@ -125,18 +127,10 @@
 			$img = "./imgfile".strrchr($img_file, '/');
 			Storage::move($img_file, $img);
 		}
-		else
-		{
-			$img = null;
-		}
 		if (strrchr($music_file, '/'))
 		{
 			$url = "./musicfile".strrchr($music_file, '/');
 			Storage::move($music_file, $url);
-		}
-		else
-		{
-			$url = null;
 		}
 
 		// 将所有数据写入数据库
