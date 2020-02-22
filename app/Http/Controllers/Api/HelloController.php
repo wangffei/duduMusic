@@ -44,6 +44,14 @@
       return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    }
 
+   public function playUrl($id){
+      $api = new MetingMusic("netease") ;
+      $song = $api -> format(true) -> url($id) ;
+      $song = json_decode($song , true)["url"] ;
+      $result = Array("code" => 200 , "msg" => "成功" , "data" => Array("url" => $song)) ;
+      return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
+   }
+
    public function albums(){
       $list = DB::select("select id , name , img from albums") ;
    	$result = Array("code" => 200 , "msg" => "成功" , "data" => ($list)) ;
@@ -51,9 +59,12 @@
    }
 
    public function album($id){
-      $list = DB::select("select mid from albums where id=$id limit 1") ;
-      $id = $list[0]["mid"] ;
-   	$filename = "./music/album".$id.".json" ;
+      $list = DB::select("select flag , mid from albums where id=$id limit 1") ;
+      if($list[0] -> flag == 1){
+
+      }
+      $mid = $list[0] -> mid ;
+   	$filename = "./music/album".$mid.".json" ;
    	if(file_exists($filename)){
    		$file = fopen($filename , "r") or die("file exception") ;
    		$data = fread($file , filesize($filename)) ;
@@ -62,7 +73,7 @@
    		return response($result) -> header("Content-Type" , "application/json") ;
    	}
    	$api = new MetingMusic("netease") ;
-   	$data = $api -> format(true) -> playlist($id) ;
+   	$data = $api -> format(true) -> playlist($mid) ;
    	$file = fopen($filename , "w") ;
    	fwrite($file, $data) ;
    	fclose($file) ;

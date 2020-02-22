@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user',function (Request $request) {
 
 Route::get('/music/{id}', "Api\HelloController@index");
 Route::get('/albums', "Api\HelloController@albums");
+Route::get('/playUrl/{id}', "Api\HelloController@playUrl");
 Route::get('/album/{id}', "Api\HelloController@album");
 Route::get('/hot', "Api\HelloController@hot");
 Route::get('/search/{key}/{page}', "Api\HelloController@search");
