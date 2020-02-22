@@ -66,7 +66,7 @@
 		}
 		else
 		{
-			$bool = DB::insert("insert into users(user, pwd, name, gender, addr, birth) values($username, $password, $name, $gender, $addr, $birth)");
+			$bool = DB::insert("insert into users(user, pwd, name, gender, addr, birth) values('$username', '$password', '$name', '$gender', '$addr', $birth)");
 			//var_dump($bool);
 			$result = Array("code" => 200, "msg" => "注册成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
