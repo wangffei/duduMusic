@@ -69,4 +69,10 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
+
+	// 上传文件
+	public function upload_file1()
+	{
+		
+	}
  }
