@@ -175,7 +175,7 @@
 		// 将所有数据写入数据库
 		if ($url != null)
 		{
-			$bool = DB::insert("insert into albums(name, img, flag, mid) values('$name', '$url', 1, 0)");
+			$bool = DB::insert("insert into albums(name, img, flag, mid, count) values('$name', '$url', 1, 0, 0)");
 			//var_dump($bool);
 			$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
