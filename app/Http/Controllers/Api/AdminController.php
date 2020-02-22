@@ -64,7 +64,7 @@
 		else
 		{
 			$bool = DB::insert("insert into users(user, pwd, name, gender, addr, birth) values($username, $password, $name, $gender, $addr, $birth)");
-			//var_dump($result);
+			//var_dump($bool);
 			$result = Array("code" => 200, "msg" => "注册成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
@@ -103,6 +103,51 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else{
 			$result = Array("code" => 500, "msg" => "上传失败" , "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 提交表单
+	public function commit1(Request $request)
+	{
+		// 获取需要提交的信息
+		$song = $request -> input("song");
+		$singer = $request -> input("singer");
+		$album = $request -> input("album");
+		$img_file = $request -> input("img_file");
+		$music_file = $request -> input("music_file");
+
+		// 获得移动后文件的地址并且移动文件
+		if (strrchr($img_file, '/'))
+		{
+			$img = "./imgfile".strrchr($img_file, '/');
+			Storage::move($img_file, $img);
+		}
+		else
+		{
+			$img = null;
+		}
+		if (strrchr($music_file, '/'))
+		{
+			$url = "./musicfile".strrchr($music_file, '/');
+			Storage::move($music_file, $url);
+		}
+		else
+		{
+			$url = null;
+		}
+
+		// 将所有数据写入数据库
+		if ($img!=null && $url!=null)
+		{
+			$bool = DB::insert("insert into all_music(song, singer, album, url, img, local) values($song, $singer, $album, $url, $img, 0)");
+			//var_dump($bool);
+			$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+		else
+		{
+			$result = Array("code" => 500, "msg" => "提交失败！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}

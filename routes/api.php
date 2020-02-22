@@ -30,3 +30,4 @@ Route::get('/my_music', "Api\AdminController@data");
 Route::get('/login', "Api\AdminController@login1");
 Route::get('/register', "Api\AdminController@register1");
 Route::post('/upload', "Api\AdminController@upload_file1");
+Route::get('/commit', "Api\AdminController@commit1");
