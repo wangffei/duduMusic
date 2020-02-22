@@ -52,7 +52,7 @@
 					<div style="width:40px;height:40px;background:gray;display:flex;"><img src="img/username.png" style="display:block;margin:4px auto;" /></div><input style="width:310px;height:36px;" type="text" placeholder="请输入账号" />
 				</div>
 			</div>
-			<div class="username" style="width:100%;height:50px;margin-top:30px;">
+			<div class="password" style="width:100%;height:50px;margin-top:30px;">
 				<div style="width:350px;height:40px;margin:0px auto;display:flex;overflow:hidden;">
 					<div style="width:40px;height:40px;background:gray;display:flex;"><img src="img/password.png" style="display:block;margin:4px auto;" /></div><input style="width:310px;height:36px;" type="password" placeholder="请输入密码" />
 				</div>
@@ -157,6 +157,23 @@
 
 	$("#panel_login").click(function(event){
 		event.stopPropagation();
+	})
+
+	//读取cookies
+	function getCookie(name)
+	{
+	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	 
+	    if(arr=document.cookie.match(reg))
+	 
+	        return unescape(arr[2]);
+	    else
+	        return null;
+	}
+
+	$("#login_btn").click(function(){
+		var username = $(".username input").val()
+		var password = $(".password input").val()
 	})
 </script>
 </html>

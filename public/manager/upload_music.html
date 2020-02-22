@@ -102,7 +102,19 @@
 		  
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
+		    $.ajax({
+		    	url:"/api/commit?"+JSON.stringify(data.field) ,
+		    	success:function(res){
+		    		if(res.code == 200){
+		    			layer.msg("成功")
+		    		}else{
+		    			layer.msg(res.msg)
+		    		}
+		    	} ,
+		    	fail:function(){
+		    		layer.msg("请求失败")
+		    	}
+		    })
 		    return false;
 		  });
 		});
