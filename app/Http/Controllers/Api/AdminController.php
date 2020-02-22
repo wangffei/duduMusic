@@ -101,6 +101,9 @@
 		if(!$file->isValid()){
 			$result = Array("code" => 0, "msg" => "上传成功" , "data" => Array("file" => "./tmp/".$newfilename));
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else{
+			$result = Array("code" => 500, "msg" => "上传失败" , "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
  }

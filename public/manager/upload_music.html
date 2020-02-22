@@ -42,6 +42,9 @@
 			</button>
 		  </div>
 
+		  <input id="img_file" type="hidden" name="img_file"/>
+		  <input id="music_file" type="hidden" name="music_file"/>
+
 		  <div class="layui-form-item">
 		    <div class="layui-input-block">
 		      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -49,7 +52,8 @@
 		    </div>
 		  </div>
 		</form>
-		<div id="upload" style="display:none;"></div>
+		<div id="upload1" style="display:none;"></div>
+		<div id="upload2" style="display:none;"></div>
 		<script src="../layui/layui/layui.all.js"></script>
 		<script src="/static/build/layui.js"></script>
 		<script>
@@ -58,10 +62,26 @@
 		  var upload = layui.upload;
 		  //执行实例
 		  var uploadInst = upload.render({
-		    elem: '#upload' //绑定元素
+		    elem: '#upload1' //绑定元素
 		    ,url: '/api/upload/' //上传接口
+		    ,accept:"audio"
 		    ,done: function(res){
-		      //上传完毕回调
+		      $("#music_file").val(res.data.file)
+		    }
+		    ,error: function(){
+		      //请求异常回调
+		    }
+		  });
+		});
+		layui.use('upload', function(){
+		  var upload = layui.upload;
+		  //执行实例
+		  var uploadInst = upload.render({
+		    elem: '#upload2' //绑定元素
+		    ,url: '/api/upload/' //上传接口
+		    ,accept:"images"
+		    ,done: function(res){
+		       $("#img_file").val(res.data.file)
 		    }
 		    ,error: function(){
 		      //请求异常回调
@@ -69,7 +89,11 @@
 		  });
 		});
 		$(".upload_item").click(function(){
-			document.getElementById("upload").click()
+			if($(this).attr("id") == "music"){
+				document.getElementById("upload1").click()
+			}else{
+				document.getElementById("upload2").click()
+			}
 		})
 		</script>
 		<script>
