@@ -8,6 +8,7 @@
  use Illuminate\Http\Request;
  use Illuminate\Support\Facades\DB;
  use Illuminate\Support\Facades\Cookie;
+ use Illuminate\Support\Facades\Storage;
 
  class AdminController extends Controller{
 	public function data()
@@ -121,16 +122,21 @@
 		$img = null;
 		$url = null;
 
+		if(is_null($img_file) || is_null($music_file)){
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+
 		// 获得移动后文件的地址并且移动文件
 		if (strrchr($img_file, '/'))
 		{
 			$img = "./imgfile".strrchr($img_file, '/');
-			Storage::move($img_file, $img);
+			$this -> move($img_file, $img);
 		}
 		if (strrchr($music_file, '/'))
 		{
 			$url = "./musicfile".strrchr($music_file, '/');
-			Storage::move($music_file, $url);
+			$this -> move($music_file, $url);
 		}
 
 		// 将所有数据写入数据库
@@ -146,5 +152,10 @@
 			$result = Array("code" => 500, "msg" => "提交失败！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
+	}
+
+	private function move($source , $dist){
+		copy($source , $dist) ;
+		unlink($source);
 	}
  }

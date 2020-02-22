@@ -103,7 +103,8 @@
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
 		    $.ajax({
-		    	url:"/api/commit?"+JSON.stringify(data.field) ,
+		    	url:"/api/commit" ,
+		    	data:data.field ,
 		    	success:function(res){
 		    		if(res.code == 200){
 		    			layer.msg("成功")
