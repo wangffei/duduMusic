@@ -71,8 +71,36 @@
 	}
 
 	// 上传文件
-	public function upload_file1()
+	public function upload_file1(Request $request)
 	{
-		
+		// 1、获取上传的文件
+
+		$file=$request->file('file');
+		// 2、获取上传文件的文件名（带后缀，如abc.png）
+
+		$filename=$file->getClientOriginalName();
+		// 3、获取上传文件的后缀（如abc.png，获取到的为png）
+
+		$fileextension=$file->getClientOriginalExtension();
+		// 4、获取上传文件的大小
+
+		// $filesize=$file->getClientSize();
+		// 5、获取缓存在tmp目录下的文件名（带后缀，如php8933.tmp）
+
+		// $filaname=$file->getFilename();
+		// 6、获取上传的文件缓存在tmp文件夹下的绝对路径
+
+		$realpath=$file->getRealPath();
+		// 7、将缓存在tmp目录下的文件移到某个位置，返回的是这个文件移动过后的路径
+		$newfilename = time().".".$fileextension ;
+		$path=$file->move("./tmp/" , $newfilename);
+		// move() 方法有两个参数，第一个参数是文件移到哪个文件夹下的路径，第二个参数是将上传的文件重新命名的文件名
+
+		// 8、检测上传的文件是否合法，返回值为true或false
+
+		if(!$file->isValid()){
+			$result = Array("code" => 0, "msg" => "上传成功" , "data" => Array("file" => "./tmp/".$newfilename));
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
 	}
  }

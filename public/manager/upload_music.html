@@ -30,14 +30,14 @@
 
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">图片</label>
-		    <button type="button" class="layui-btn" id="image">
+		    <button type="button" class="layui-btn upload_item" id="image">
 			  <i class="layui-icon">&#xe67c;</i>上传图片
 			</button>
 		  </div>
 
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">歌曲</label>
-		    <button type="button" class="layui-btn" id="music">	
+		    <button type="button" class="layui-btn upload_item" id="music">	
 			  <i class="layui-icon">&#xe67c;</i>上传歌曲文件
 			</button>
 		  </div>
@@ -49,17 +49,17 @@
 		    </div>
 		  </div>
 		</form>
-		 
+		<div id="upload" style="display:none;"></div>
 		<script src="../layui/layui/layui.all.js"></script>
 		<script src="/static/build/layui.js"></script>
 		<script>
+		var $ = layui.jquery ;
 		layui.use('upload', function(){
 		  var upload = layui.upload;
-		   
 		  //执行实例
 		  var uploadInst = upload.render({
-		    elem: '#image' //绑定元素
-		    ,url: '/upload/' //上传接口
+		    elem: '#upload' //绑定元素
+		    ,url: '/api/upload/' //上传接口
 		    ,done: function(res){
 		      //上传完毕回调
 		    }
@@ -68,23 +68,9 @@
 		    }
 		  });
 		});
-		</script>
-		<script>
-		layui.use('upload', function(){
-		  var upload = layui.upload;
-		   
-		  //执行实例
-		  var uploadInst = upload.render({
-		    elem: '#music' //绑定元素
-		    ,url: '/upload/' //上传接口
-		    ,done: function(res){
-		      //上传完毕回调
-		    }
-		    ,error: function(){
-		      //请求异常回调
-		    }
-		  });
-		});
+		$(".upload_item").click(function(){
+			document.getElementById("upload").click()
+		})
 		</script>
 		<script>
 		//Demo
