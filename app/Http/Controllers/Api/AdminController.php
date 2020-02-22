@@ -154,6 +154,39 @@
 		}
 	}
 
+	public function song_list1(Request $request){
+		// 需要提交的信息
+		$name = $request -> input("name");
+		$img_file = $request -> input("img_file");
+		$url = null;
+
+		if(is_null($img_file) || is_null($name)){
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+
+		// 获得移动后文件的地址并且移动文件
+		if (strrchr($img_file, '/'))
+		{
+			$url = "./song_list".strrchr($img_file, '/');
+			$this -> move($img_file, $url);
+		}
+
+		// 将所有数据写入数据库
+		if ($url != null)
+		{
+			$bool = DB::insert("insert into albums(name, img, flag, mid) values('$name', '$url', 1, 0)");
+			//var_dump($bool);
+			$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+		else
+		{
+			$result = Array("code" => 500, "msg" => "提交失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
 	private function move($source , $dist){
 		copy($source , $dist) ;
 		//unlink($source);
