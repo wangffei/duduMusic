@@ -142,7 +142,7 @@
 		// 将所有数据写入数据库
 		if ($img!=null && $url!=null)
 		{
-			$bool = DB::insert("insert into all_music(song, singer, album, url, img, local) values($song, $singer, $album, '$url', '$img', 0)");
+			$bool = DB::insert("insert into all_music(song, singer, album, url, img, local) values('$song', '$singer', '$album', '$url', '$img', 0)");
 			//var_dump($bool);
 			$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
