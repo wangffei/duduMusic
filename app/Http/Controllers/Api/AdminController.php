@@ -7,6 +7,7 @@
  use App\Util\MetingMusic ;
  use Illuminate\Http\Request;
  use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Cookie;
 
  class AdminController extends Controller{
 	public function data()
@@ -31,7 +32,8 @@
 		{
 			$result = Array("code" => 500, "msg" => "账号或者密码错误！", "count" => 1, "data" => $admin);
 		}
-		return response(json_encode($result)) -> header("Content-Type", "application/json");
+		$cookie = Cookie::make("username" , $username , 30 , $httpOnly = false) ;
+		return response(json_encode($result)) -> header("Content-Type", "application/json") -> withCookie($cookie) ;
 	}
 
 	// 注册
