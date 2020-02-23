@@ -53,7 +53,7 @@
    }
 
    public function albums(){
-      $list = DB::select("select id , name , img , mid , count from albums") ;
+      $list = DB::select("select id , name , img , mid , flag , count from albums") ;
    	$result = Array("code" => 200 , "msg" => "成功" , "data" => ($list)) ;
    	return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    }

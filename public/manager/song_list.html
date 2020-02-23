@@ -10,19 +10,21 @@
     <style>
       *{margin:0px;padding:0px;}
       html,body{width:100%;height:100%;}
-      iframe{border:0px;}
+    .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
     </style>
   </head>
   <body>
    
   <table id="list" lay-filter="test"></table>
 
-  <script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-      <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="add">+</button>
-      <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
-      <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
-    </div>
+  <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
+
+  <script type="text/html" id="titleTpl">
+    {{d.flag == '0' ? "网易云歌单" : "本地歌单"}}
   </script>
    
   <script src="../layui/layui/layui.all.js"></script>
@@ -36,6 +38,7 @@
     table.render({
       elem: '#list'
       ,height: height - 50
+      ,loading:true
       ,url: '/api/albums' //数据接口
       ,response: {
         //statusName: 'status' //规定数据状态的字段名称，默认：code
@@ -44,23 +47,26 @@
         //,countName: 'total' //规定数据总数的字段名称，默认：count
         //,dataName: 'rows' //规定数据列表的字段名称，默认：data
       } 
+      ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+      ,totalRow: true //开启合计行
       //,page: true //开启分页
-      ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-      ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-        title: '提示'
-        ,layEvent: 'LAYTABLE_TIPS'
-        ,icon: 'layui-icon-tips'
-      }]
+      //,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+      //,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+      //  title: '提示'
+      //  ,layEvent: 'LAYTABLE_TIPS'
+      //  ,icon: 'layui-icon-tips'
+      //}]
       ,title: '用户数据表'
       ,cols: [[ //表头
         {type: 'checkbox', fixed: 'left'}
-        ,{field: 'id', title: 'ID', width:80}
+        ,{field: 'id', title: 'ID', width:80 , sort:true}
         ,{field: 'name', title: '歌单名'}
-        ,{field: 'name', title: '类型'}
+        ,{field: 'flag', title: '类型' , templet:"#titleTpl"}
         ,{field: 'mid', title: '歌单mid'}
         ,{field: 'img', title: '图片'}
         ,{field: 'count', title: '歌曲数量'}
-      ]]
+        ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+      ]] 
     });
 
     //头工具栏事件
