@@ -33,7 +33,7 @@
         //,countName: 'total' //规定数据总数的字段名称，默认：count
         //,dataName: 'rows' //规定数据列表的字段名称，默认：data
       } 
-      ,page: true //开启分页
+      //,page: true //开启分页
       ,cols: [[ //表头
         {field: 'id', title: 'ID', width:80, fixed: 'left'}
         ,{field: 'name', title: '歌单名'}
@@ -41,10 +41,14 @@
         ,{field: 'mid', title: '歌单mid'}
         ,{field: 'img', title: '图片'}
         ,{field: 'count', title: '歌曲数量'}
+        ,{field: '', title: '操作', toolbar: "#bar"}
       ]]
     });
-    
   });
+  </script>
+  <script type="text/html" id="bar">
+    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="detail">查看</button>
+    <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
   </script>
   </body>
 </html>

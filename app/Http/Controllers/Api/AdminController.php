@@ -154,6 +154,7 @@
 		}
 	}
 
+	// 提交新建歌单信息
 	public function song_list1(Request $request){
 		// 需要提交的信息
 		$name = $request -> input("name");
