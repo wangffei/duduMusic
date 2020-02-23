@@ -49,6 +49,16 @@
 				old = self.current["ks"][i]
 			}
 		}
+		this.pre = function(){
+			self.current["index"] = self.current["index"]*1 - 1
+			if(self.current["index"]*1 < 1){
+				self.current["index"] = self.array.length
+			}
+			self.play(self.current["index"])
+		}
+		this.pause = function(){
+			self.el.pause()
+		}
 		this.addAndPlay = function(data){
 			for(var i in this.array){
 				if(this.array[i].songName == data.songName && this.array[i].singer == data.singer){
@@ -117,7 +127,7 @@
 			this.storage(data)
 			this.array.push(data)
 		}
-		this.play = function(index){
+		this.play = function(index = self.current["index"]){
 			try{
 				self.current["index"] = index
 				if(self.array[index*1 - 1].local == undefined || self.array[index*1 - 1].local == 1 || self.array[index*1 - 1].local == '1'){

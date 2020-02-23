@@ -44,8 +44,13 @@
 			<router-view></router-view>
 		</div>
 		<div id="music_control" class="control">
-			<div style="width:90%;margin:0px auto;height:50px;display:flex;">
-				<div class="control_btn"></div>
+			<div style="width:85%;margin:0px auto;height:50px;display:flex;">
+				<div class="control_panel">
+					<div class="control_btn"><img src="./img/control.png" style="width:40px;height:40px;margin:5px;" /></div>
+					<div data="pre" class="control_pre control_item"><i style="width:22px;height:23px;margin:13.5px 14px;background:url('./img/player.png') 0px -29px;overflow:hidden;" ></i></div>
+					<div data="play" class="control_play control_item"><i style="width:22px;height:30px;margin:10px 16px;background:url('./img/player.png');overflow:hidden;" ></i></div>
+					<div data="next" class="control_next control_item"><i style="width:22px;height:23px;margin:13.5px 14px;background:url('./img/player.png') 0px -50px;overflow:hidden;" ></i></div>
+				</div>
 			</div>
 		</div>
 		<audio src="" id="audio" src="" autobuffer style="display:hidden;"></audio>
@@ -261,6 +266,27 @@
 				layer.msg("请求失败")
 			}
 		})
+	})
+
+	// 播放暂停，上一曲下一曲
+	$(".control_item").click(function(){
+		if($(this).attr("data") == "play"){
+			$(this).attr("data" , "pause")
+			player.play()
+			$(this).find("i").css("background" , "url('./img/player.png') -29px 0px")
+		}else if($(this).attr("data") == "next"){
+			player.next()
+			$(this).prev().find("i").css("background" , "url('./img/player.png') -29px 0px")
+			$(this).prev().attr("data" , "pause")
+		}else if($(this).attr("data") == "pre"){
+			player.pre()
+			$(this).next().find("i").css("background" , "url('./img/player.png') -29px 0px")
+			$(this).next().attr("data" , "pause")
+		}else if($(this).attr("data") == "pause"){
+			$(this).attr("data" , "play")
+			player.pause()
+			$(this).find("i").css("background" , "url('./img/player.png') 0px 0px")
+		}
 	})
 </script>
 </html>
