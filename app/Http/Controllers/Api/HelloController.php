@@ -10,6 +10,8 @@
  class HelloController extends Controller{
 
    public function index($id){
+      // 1.判断用户是否登陆
+      $username = request() -> cookie("username") ;
    	$filename = "./music/music".$id.".json" ;
    	if(file_exists($filename)){
    		$file = fopen($filename , "r") or die("file exception") ;
@@ -21,6 +23,25 @@
    		$song = $api -> format(true) -> url($result["data"]["id"]) ;
    		$song = json_decode($song , true)["url"] ;
    		$result["data"]["play_url"] = $song ;
+         // 如果用于已经登陆
+         if($username){
+            // 1.从音乐表中查出当前歌曲
+            $music = DB::select("select id from all_music where mid=$id") ;
+            if(count($music) > 0){
+               $user = DB::select("select id from user_music where music_id = {$music[0] -> id}") ;
+               if(count($user)==0){
+                  DB::insert("insert into user_music(music_id , username) values({$music[0] -> id} , '$username')") ;
+               }
+            }else{
+               $lrc = addslashes($result["data"]["lyric"]) ;
+               $sql = "insert into all_music(song , singer , album , img , local , mid , lrc) values('{$result["data"]["songName"]}' , '{$result["data"]["singer"]}' , '{$result["data"]["album"]}' , '{$result["data"]["img"]}' , 1 , {$result["data"]["id"]} , '{$lrc}')" ;
+               $flag = DB::insert($sql) ;
+               if($flag){
+                  $iid = DB::select("SELECT LAST_INSERT_ID() as id") ;
+                  DB::insert("insert into user_music(music_id , username) values('{$iid[0] -> id}' , '$username')") ;
+               }
+            }
+         }
    		return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    	}
    	$api = new MetingMusic("netease") ;
@@ -40,7 +61,25 @@
    	$file = fopen($filename , "w") ;
    	fwrite($file, json_encode($result)) ;
    	fclose($file) ;
-
+      // 如果用于已经登陆
+      if($username){
+         // 1.从音乐表中查出当前歌曲
+         $music = DB::select("select id from all_music where mid=$id") ;
+         if(count($music) > 0){
+            $user = DB::select("select id from user_music where music_id = {$music[0] -> id}") ;
+            if(count($user)==0){
+               DB::insert("insert into user_music(music_id , username) values({$music[0] -> id} , '$username')") ;
+            }
+         }else{
+            $lrc = addslashes($result["data"]["lyric"]) ;
+            $sql = "insert into all_music(song , singer , album , img , local , mid , lrc) values('{$result["data"]["songName"]}' , '{$result["data"]["singer"]}' , '{$result["data"]["album"]}' , '{$result["data"]["img"]}' , 1 , {$result["data"]["id"]} , '{$lrc}')" ;
+            $flag = DB::insert($sql) ;
+            if($flag){
+               $iid = DB::select("SELECT LAST_INSERT_ID() as id") ;
+               DB::insert("insert into user_music(music_id , username) values('{$iid[0] -> id}' , '$username')") ;
+            }
+         }
+      }
       return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
    }
 
@@ -118,5 +157,10 @@
    	return response(json_encode($result)) -> header("Content-Type", "application/json");
    }
 
-
+   public function list(){
+      $username = request() -> cookie("username") ;
+      $list = DB::select("select all_music.song as songName , all_music.singer as singer , all_music.album as album , all_music.url as play_url , all_music.img as img , all_music.local as local , all_music.mid as id , all_music.lrc as lrc from all_music , user_music where all_music.id = user_music.music_id and username='$username'") ;
+      $result = Array("code" => 200, "msg" => "成功", "data" => $list);
+      return response(json_encode($result)) -> header("Content-Type", "application/json");
+   }
  }

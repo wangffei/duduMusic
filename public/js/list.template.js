@@ -27,9 +27,9 @@ var list = Vue.component('list', {
 	  			for(var i in d){
 	  				var obj = {}
 	  				obj.name = d[i].name
-					obj.album = d[i].album
-        			obj.time = d[i].artist[0]
-        			arr.push(obj)
+					  obj.album = d[i].album
+        		obj.time = d[i].artist[0]
+        		arr.push(obj)
 	  			}
 	  			var musicList = new MusicList(self.$refs["list_right"] , {})
 	  			musicList.add(arr)

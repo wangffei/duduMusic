@@ -21,6 +21,7 @@ Route::get('/albums', "Api\HelloController@albums");
 Route::get('/playUrl/{id}', "Api\HelloController@playUrl");
 Route::get('/album/{id}', "Api\HelloController@album");
 Route::get('/hot', "Api\HelloController@hot");
+Route::get('/list', "Api\HelloController@list");
 Route::get('/search/{key}/{page}', "Api\HelloController@search");
 
 Route::get("/info", function (Request $request) {

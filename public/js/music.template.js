@@ -30,7 +30,9 @@ var music = Vue.component('music', {
 		self.music.add(arr)
 		self.music.on("click" , this.item_click)
 		// 初始化歌词
-		player.lrc_init(player.array[player.current["index"] - 1].lrc)
+		try{
+			player.lrc_init(player.array[player.current["index"] - 1].lrc)
+		}catch(msg){}
 		$("#singer_img").attr("src" , player.array[player.current["index"] - 1].img)
 		this.width = document.offsetWidth
   		this.height = document.offsetHeight

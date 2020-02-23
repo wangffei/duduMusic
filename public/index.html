@@ -117,11 +117,26 @@
 	}
 
 	var player = new Player(document.getElementById("audio") , {}) 
-	var storage = window.localStorage["list"]
-	if(storage){
-		storage = JSON.parse(storage)
-		for(var i in storage){
-			player.add(storage[i])
+	// 1.判断是否登陆
+	if(getCookie("username")){
+		$.ajax({
+			url:"/api/list" ,
+			async:false ,
+			success:function(res){
+				if(res.code == 200){
+					for(var i in res.data){
+						player.add(res.data[i])
+					}
+				}
+			}
+		})
+	}else{
+		var storage = window.localStorage["list"]
+		if(storage){
+			storage = JSON.parse(storage)
+			for(var i in storage){
+				player.add(storage[i])
+			}
 		}
 	}
 	var routes = [
@@ -227,6 +242,19 @@
 					$("#panel_login_container").css("display" , "none")
 					var user = getCookie("username")
 					$(".login_icon").before(res.data[0].name)
+					$.ajax({
+						url:"/api/list" ,
+						async:false ,
+						success:function(res){
+							if(res.code == 200){
+								player.clear() 
+								for(var i in res.data){
+									player.add(res.data[i])
+								}
+								app.$router.push("/")
+							}
+						}
+					})
 				}
 			},
 			fail:function(){

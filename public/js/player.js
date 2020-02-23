@@ -65,7 +65,11 @@
 			}catch(err){
 				console.log("歌词上方图片设置失败")
 			}
-			this.ajax({url:"/api/playUrl/"+data["id"] , async:false , dataType:"json" , callback:{success:function(res){self.el.src = res.data.url ;}}})
+			if(data.local == undefined || data.local == 1 || data.local == '1'){
+				this.ajax({url:"/api/playUrl/"+data["id"] , async:false , dataType:"json" , callback:{success:function(res){self.el.src = res.data.url ;}}})
+			}else{
+				self.el.src = data.play_url ;
+			}
 			this.el.play()
 			self.current["index"] = this.array.length
 		}
@@ -116,7 +120,11 @@
 		this.play = function(index){
 			try{
 				self.current["index"] = index
-				this.ajax({url:"/api/playUrl/"+self.array[index*1 - 1]["id"] , dataType:"json" , async:false , callback:{success:function(res){self.el.src = res.data.url ;}}})
+				if(self.array[index*1 - 1].local == undefined || self.array[index*1 - 1].local == 1 || self.array[index*1 - 1].local == '1'){
+					this.ajax({url:"/api/playUrl/"+self.array[index*1 - 1]["id"] , dataType:"json" , async:false , callback:{success:function(res){self.el.src = res.data.url ;}}})
+				}else{
+					self.el.src = self.array[index*1 - 1].play_url ;
+				}
 				this.lrc_init(this.array[index-1].lrc)
 			}catch(err){} 
 			this.el.play()
@@ -124,6 +132,9 @@
 				document.getElementById("singer_bg_img").src = this.array[index-1].img
 				document.getElementById("singer_img").src = this.array[index-1].img
 			}catch(err){}
+		}
+		this.clear = function(){
+			this.array = []
 		}
 		this.lrc_init = function(lrc){
 			var panel = document.getElementById(this.lrcPanel).querySelector(".mCSB_container")
