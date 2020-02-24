@@ -12,7 +12,7 @@
       layui.use(['transfer'], function() {
         let transfer = layui.transfer;
         let $ = layui.$;
-        let url = "http://127.0.0.1:8000/api/my_music"
+        let url = "/api/my_music"
         $.post(url, function(result) {
           // 不清楚数据结构，所以打印到控制台
           console.log(result);
