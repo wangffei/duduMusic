@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>向歌单中添加歌曲</title>
+  <link rel="stylesheet" href="../layui/layui/css/layui.css" media="all">
+</head>
+<body>
+  <div id="amtl" class="mb-4 mt-5" style="margin-left: 400px;"></div>
+  <script src="../layui/layui/layui.all.js" type="text/javascript" charset="UTF-8"></script>
+  <script>
+      layui.use(['transfer'], function() {
+        let transfer = layui.transfer;
+        let $ = layui.$;
+        let url = "http://127.0.0.1:8000/api/my_music"
+        $.post(url, function(result) {
+          // 不清楚数据结构，所以打印到控制台
+          console.log(result);
+          // 穿梭框渲染返回的数据
+          transfer.render({
+            elem: '#amtl'                      // 绑定元素的ID
+            ,title: ['可选歌曲', '已选歌曲']      // 自定义标题
+            ,data: data                        // 数据源
+            ,id: 'ID'                          // 标识符
+            ,width: 450                        // 宽度
+            ,height: 300                       // 高度
+            ,showSearch:true                   // 开启搜索栏
+            ,text: {
+              none: '暂无音乐',                  // 没有数据时的文案
+              searchNone: '无匹配歌曲'           // 搜索无匹配数据时的文案
+            }
+            ,parseData: function(data) {
+              return {
+                "value": data.value             // 数据值
+                ,"title": data.song + '-' + data.singer + '-' + data.album    // 数据标题
+                ,"disabled": data.disabled      // 是否禁用
+                ,"checked": data.checked        // 是否选中
+              }
+            }
+          });
+        },
+        "json")
+      })
+  </script>
+</body>
+</html>
