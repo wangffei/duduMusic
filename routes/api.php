@@ -37,3 +37,4 @@ Route::get('/commit', "Api\AdminController@commit1");
 Route::get('/song_list', "Api\AdminController@song_list1");
 Route::get('/add', "Api\AdminController@add1");
 Route::get('/delete', "Api\AdminController@delete1");
+Route::get('/update_count', "Api\AdminController@update_count1");

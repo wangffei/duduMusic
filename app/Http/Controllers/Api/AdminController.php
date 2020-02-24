@@ -207,11 +207,11 @@
 		// 需要提交的信息
 		$album_id = $request -> input('album_id');
 		$music_id = $request -> input('music_id');
-		dump($album_id) ;
-		dump($music_id) ;
+		//dump($album_id) ;
+		//dump($music_id) ;
 
 		if($album_id!=null && $music_id!=null) {
-			$bool = DB::insert("insert into album_music_list(album_id, music_id) values({$album_id}, {$music_id})");
+			$bool = DB::insert("insert into album_music_list(album_id, music_id) values($album_id, $music_id)");
 			$result = Array("code" => 200, "msg" => "增加成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
@@ -232,6 +232,21 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
 			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 修改歌单中count的值
+	public function update_count1(Request $request) {
+		$count = $request -> input('count');
+		$id = $request -> input('id');
+
+		if($count != null) {
+			$bool = DB::update('update albums set count=? where id=?', [$count, $id]);
+			$result = Array("code" => 200, "msg" => "修改成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "修改失败！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}

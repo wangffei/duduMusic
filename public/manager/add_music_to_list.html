@@ -56,7 +56,23 @@
                   data: {album_id: id, music_id: data[0].value},
                   success: function(res) {
                     if(res.code == 200) {
-                      layer.msg("成功")
+                      //layer.msg("成功")
+                      var getData = transfer.getData('demo');
+                      $.ajax({
+                              url: "/api/update_count",
+                              data: {id: id, count: getData.length},
+                              success: function(res) {
+                                if(res.code == 200) {
+                                  layer.msg("成功")
+                                }else {
+                                  layer.msg(res.msg)
+                                }
+                              },
+                              fail: function() {
+                                layer.msg("请求失败")
+                              }
+                            })
+                            return false;
                     }else {
                       layer.msg(res.msg)
                     }
@@ -72,7 +88,23 @@
                   data: {album_id: id, music_id: data[0].value},
                   success: function(res) {
                     if(res.code == 200) {
-                      layer.msg("成功")
+                      //layer.msg("成功")
+                      var getData = transfer.getData('demo');
+                      $.ajax({
+                              url: "/api/update_count",
+                              data: {id: id, count: getData.length},
+                              success: function(res) {
+                                if(res.code == 200) {
+                                  layer.msg("成功")
+                                }else {
+                                  layer.msg(res.msg)
+                                }
+                              },
+                              fail: function() {
+                                layer.msg("请求失败")
+                              }
+                            })
+                            return false;
                     }else {
                       layer.msg(res.msg)
                     }
@@ -88,13 +120,12 @@
               //console.log(data);
               return {
                 "value": data.id             // 数据值
-                ,"title": '歌名：' + data.song + '----' + '歌手：'+ data.singer + '----' + '专辑：' + data.album
+                ,"title": data.song + '----' + data.singer + '----' + data.album
                 ,"disabled": data.disabled      // 是否禁用
                 ,"checked": data.checked        // 是否选中
               }
             }
           });
-
         },
         "json")
       })
