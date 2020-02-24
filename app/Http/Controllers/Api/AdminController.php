@@ -201,4 +201,36 @@
 		$result = Array("code" => 200, "msg" => "成功",  "data" => Array("list_yes" => $list_yes , "list_no" => $list_no));
 		return response(json_encode($result)) -> header("Content-Type", "application/json");
 	}
+
+	// 向歌单中增加歌曲
+	public function add1(Request $request) {
+		// 需要提交的信息
+		$album_id = $request -> input('album_id');
+		$music_id = $request -> input('music_id');
+
+		if($album_id!=null && $music_id!=null) {
+			$bool = DB::insert("insert into album_music_list(album_id, music_id) values($album_id, $music_id)");
+			$result = Array("code" => 200, "msg" => "增加成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "增加失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 从歌单中删除歌曲
+	public function delete1(Request $request) {
+		// 需要删除的信息
+		$album_id = $request -> input('album_id');
+		$music_id = $request -> input('music_id');
+
+		if($album_id!=null && $music_id!=null) {
+			$bool = DB::delete("delete from album_music_list where album_id=$album_id and music_id=$music_id");
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
  }

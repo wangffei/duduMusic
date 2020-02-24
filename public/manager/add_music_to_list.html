@@ -31,14 +31,14 @@
             data_temp.push(result.data.list_yes[i])
             indexs.push(result.data.list_yes[i].id)
           }
-          console.log(indexs)
+          //console.log(indexs)
           // 穿梭框渲染返回的数据
           transfer.render({
             elem: '#amtl'                      // 绑定元素的ID
             ,title: ['可选歌曲', '已有歌曲']      // 自定义标题
             ,data: data_temp                // 数据源
             ,value: indexs 
-            ,id: 'ID'                          // 标识符
+            ,id: 'demo'                          // 标识符
             ,width: 450                        // 宽度
             ,height: 600                       // 高度
             ,showSearch:true                   // 开启搜索栏
@@ -46,16 +46,55 @@
               none: '暂无音乐',                  // 没有数据时的文案
               searchNone: '无匹配歌曲'           // 搜索无匹配数据时的文案
             }
+            ,onchange: function(data, index){
+              //console.log(data[0].value);
+              //console.log(index);
+              // 需要传入数据库的数据album_id ==> indexs     music_id ==> data[0].value
+              if(0 == index) {
+                $.ajax({
+                  url: "/api/add",
+                  data: {album_id: indexs, music_id: data[0].value},
+                  success: function(res) {
+                    if(res.code == 200) {
+                      layer.msg("成功")
+                    }else {
+                      layer.msg(res.msg)
+                    }
+                  },
+                  fail: function() {
+                    layer.msg("请求失败")
+                  }
+                })
+                return false;
+              }else {
+                $.ajax({
+                  url: "/api/delete",
+                  data: {album_id: indexs, music_id: data[0].value},
+                  success: function(res) {
+                    if(res.code == 200) {
+                      layer.msg("成功")
+                    }else {
+                      layer.msg(res.msg)
+                    }
+                  },
+                  fail: function() {
+                    layer.msg("请求失败")
+                  }
+                })
+                return false;
+              }
+            }
             ,parseData: function(data) {
-              console.log(data);
+              //console.log(data);
               return {
                 "value": data.id             // 数据值
-                ,"title": data.song + '-' + data.singer + '-' + data.album    // 数据标题
+                ,"title": '歌名：' + data.song + '----' + '歌手：'+ data.singer + '----' + '专辑：' + data.album
                 ,"disabled": data.disabled      // 是否禁用
                 ,"checked": data.checked        // 是否选中
               }
             }
           });
+
         },
         "json")
       })

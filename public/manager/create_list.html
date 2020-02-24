@@ -65,6 +65,7 @@
       
       //监听提交
       form.on('submit(formDemo)', function(data){
+        //console.log(data.field);
         $.ajax({
           url:"/api/song_list" ,
           data:data.field ,

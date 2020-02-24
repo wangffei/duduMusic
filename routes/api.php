@@ -35,3 +35,5 @@ Route::get('/register', "Api\AdminController@register1");
 Route::post('/upload', "Api\AdminController@upload_file1");
 Route::get('/commit', "Api\AdminController@commit1");
 Route::get('/song_list', "Api\AdminController@song_list1");
+Route::get('/add', "Api\AdminController@add1");
+Route::get('/delete', "Api\AdminController@delete1");
