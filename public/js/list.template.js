@@ -47,13 +47,13 @@ var list = Vue.component('list', {
   			url:"/api/music/"+d["id"] ,
   			success:function(res){
   				var data = {}
-				data.id = res.data.id
-				data.img = res.data.img
-				data.lrc = res.data.lyric
-				data.songName = res.data.songName
-				data.singer = res.data.singer 
-				data.album = res.data.album
-				player.addAndPlay(data)
+  				data.id = res.data.id
+  				data.img = res.data.img
+  				data.lrc = res.data.lyric
+  				data.songName = res.data.songName
+  				data.singer = res.data.singer 
+  				data.album = res.data.album
+  				player.addAndPlay(data)
   			}
   		})
   	}

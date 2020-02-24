@@ -10,6 +10,13 @@
  class HelloController extends Controller{
 
    public function index($id){
+      // 1.查数据库是否有当前歌曲
+      $m = DB::select("select * from all_music where id=$id") ;
+      if(count($m) > 0){
+         $list_music = DB::select("select song as songName , singer as singer , album as album , url as play_url , img as img , local as local , id , lrc as lrc from all_music where id=$id") ;
+         $result = Array("code" => 200 , "msg" => "成功" , "data" => ($list_music[0])) ;
+         return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
+      }
       // 1.判断用户是否登陆
       $username = request() -> cookie("username") ;
    	$filename = "./music/music".$id.".json" ;
@@ -84,6 +91,12 @@
    }
 
    public function playUrl($id){
+      $m = DB::select("select * from all_music where id=$id") ;
+      if(count($m) > 0){
+         $list_music = DB::select("select  url  from all_music where id=$id") ;
+         $result = Array("code" => 200 , "msg" => "成功" , "data" => ($list_music[0])) ;
+         return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
+      }
       $api = new MetingMusic("netease") ;
       $song = $api -> format(true) -> url($id) ;
       $song = json_decode($song , true)["url"] ;
@@ -100,7 +113,14 @@
    public function album($id){
       $list = DB::select("select flag , mid from albums where id=$id limit 1") ;
       if($list[0] -> flag == 1){
-
+         $list_music = DB::select("select * from all_music where id in (select music_id from album_music_list where album_id=$id)") ;
+         $data = Array() ;
+         for($i = 0 ; $i < count($list_music) ; $i++){
+            $temp = Array("id" => $list_music[$i] -> id , "name" => $list_music[$i] -> song , "artist" => Array(0 => $list_music[$i] -> singer) , "album" => $list_music[$i] -> album) ;
+            array_push($data , $temp) ;
+         }
+         $result = Array("code" => 200 , "msg" => "成功" , "data" => $data) ;
+         return response(json_encode($result)) -> header("Content-Type" , "application/json") ;
       }
       $mid = $list[0] -> mid ;
    	$filename = "./music/album".$mid.".json" ;
