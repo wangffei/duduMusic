@@ -9,19 +9,35 @@
   <div id="amtl" class="mb-4 mt-5" style="margin-left: 100px;"></div>
   <script src="../layui/layui/layui.all.js" type="text/javascript" charset="UTF-8"></script>
   <script>
+
+      function GetQueryString(name)
+      {
+           var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+           var r = window.location.search.substr(1).match(reg);
+           if(r!=null)return  unescape(r[2]); return null;
+      }
+      var id = GetQueryString("album_id")
       layui.use(['transfer'], function() {
         let transfer = layui.transfer;
         let $ = layui.$;
-        let url = "/api/my_music"
+        let url = "/api/list_music/"+id
         $.post(url, function(result) {
-          // 不清楚数据结构，所以打印到控制台
-          console.log(result);
+          var data_temp = []
+          var indexs = []
+          for(var i in result.data.list_no){
+            data_temp.push(result.data.list_no[i])
+          }
+          for(var i in result.data.list_yes){
+            data_temp.push(result.data.list_yes[i])
+            indexs.push(result.data.list_yes[i].id)
+          }
+          console.log(indexs)
           // 穿梭框渲染返回的数据
           transfer.render({
             elem: '#amtl'                      // 绑定元素的ID
             ,title: ['可选歌曲', '已有歌曲']      // 自定义标题
-            ,data: result.data                 // 数据源
-            ,value: ['3']
+            ,data: data_temp                // 数据源
+            ,value: indexs 
             ,id: 'ID'                          // 标识符
             ,width: 450                        // 宽度
             ,height: 600                       // 高度
