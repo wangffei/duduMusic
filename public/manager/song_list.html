@@ -65,7 +65,13 @@
       switch(obj.event){
         case 'add':
           //layer.msg('添加');
-          location.href = "./create_list.html";
+          //location.href = "./create_list.html";
+          layer.open({
+            type: 1
+            ,title: "请选择"
+            ,btn: ['添加网易云歌单', '添加本地歌单']
+            ,content: '<button type="button" class="layui-btn layui-btn-normal layui-btn-radius">添加网易云歌单</button><button type="button" class="layui-btn layui-btn-normal layui-btn-radius">添加本地歌单  </button>'
+          });
         break;
         case 'delete':
           if(data.length === 0) {
@@ -78,6 +84,7 @@
                 success:function(res){
                   if(res.code == 200){
                     layer.msg("删除成功")
+                    location.reload();
                   }else{
                     layer.msg(res.msg)
                   }
@@ -102,6 +109,7 @@
                 success: function(res) {
                   if(res.code == 200) {
                     layer.msg("删除成功")
+                    location.reload();
                   }else {
                     layer.msg(res.msg)
                   }
@@ -114,6 +122,7 @@
             obj.del();
             layer.close(index);
           }
+          //location.reload();
         break;
         case 'update':
           if(data.length === 0){
