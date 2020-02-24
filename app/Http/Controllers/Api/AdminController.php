@@ -211,7 +211,10 @@
 		//dump($music_id) ;
 
 		if($album_id!=null && $music_id!=null) {
-			$bool = DB::insert("insert into album_music_list(album_id, music_id) values($album_id, $music_id)");
+			foreach ($music_id as $value) {
+			 	# code...
+			 	$bool = DB::insert("insert into album_music_list(album_id, music_id) values($album_id, $value)");
+			}
 			$result = Array("code" => 200, "msg" => "增加成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
@@ -227,7 +230,9 @@
 		$music_id = $request -> input('music_id');
 
 		if($album_id!=null && $music_id!=null) {
-			$bool = DB::delete("delete from album_music_list where album_id=$album_id and music_id=$music_id");
+			foreach ($music_id as $value) {
+				$bool = DB::delete("delete from album_music_list where album_id=$album_id and music_id=$value");
+			}
 			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
@@ -258,6 +263,23 @@
 		if($id != null) {
 			$bool = DB::delete("delete from albums where id=?", [$id]);
 			$num = DB::delete("delete from album_music_list where album_id=?", [$id]);
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 批量删除歌单
+	public function delete_lists1(Request $request) {
+		$ids = $request -> input('ids');
+
+		if($ids != null) {
+			foreach ($ids as $value) {
+				$bool = DB::delete("delete from albums where id=?", [$value]);
+				$num = DB::delete("delete from album_music_list where album_id=?", [$value]);
+			}
 			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {

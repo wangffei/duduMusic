@@ -89,7 +89,7 @@
               }else {
                 $.ajax({
                   url: "/api/delete",
-                  data: {album_id: id, music_id: data[0].value},
+                  data: {album_id: id, music_id: ids},
                   success: function(res) {
                     if(res.code == 200) {
                       //layer.msg("成功")
