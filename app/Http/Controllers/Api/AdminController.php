@@ -241,12 +241,26 @@
 		$count = $request -> input('count');
 		$id = $request -> input('id');
 
-		if($count != null) {
+		if($count != null && $id != null) {
 			$bool = DB::update('update albums set count=? where id=?', [$count, $id]);
 			$result = Array("code" => 200, "msg" => "修改成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
 			$result = Array("code" => 500, "msg" => "修改失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 删除歌单
+	public function delete_list1(Request $request) {
+		$id = $request -> input('id');
+
+		if($id != null) {
+			$bool = DB::delete("delete from albums where id=?", [$id]);
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}

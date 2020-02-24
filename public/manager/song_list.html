@@ -19,6 +19,7 @@
 
   <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="detail">增加歌曲</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除歌单</a>
   </script>
 
   <script type="text/html" id="titleTpl">
@@ -60,15 +61,35 @@
     table.on('toolbar(test)', function(obj){
       var checkStatus = table.checkStatus(obj.config.id);
       var data = checkStatus.data;    // 选中的数据
+      console.log(data[0].id);
       switch(obj.event){
         case 'add':
-          layer.msg('添加');
+          //layer.msg('添加');
+          location.href = "./create_list.html";
         break;
         case 'delete':
           if(data.length === 0){
             layer.msg("请选择一行");
           } else{
-            layer.msg('删除');
+            layer.confirm('删除此歌单', function(index) {
+              $.ajax({
+                      url:"/api/delete_list" ,
+                      data:data[0].id,
+                      success:function(res){
+                        if(res.code == 200){
+                          layer.msg("成功")
+                        }else{
+                          layer.msg(res.msg)
+                        }
+                      } ,
+                      fail:function(){
+                        layer.msg("请求失败")
+                      }
+                    })
+                    return false;
+              obj.del();
+              layer.close(index);
+            })
           }
         break;
         case 'update':
@@ -94,6 +115,27 @@
         } else{
           layer.msg('网易云歌单无法进行增加歌曲操作！！！');
         }
+      }else if(layEvent === 'del') {
+        console.log(data.id);
+        layer.confirm('删除此歌单', function(index) {
+              $.ajax({
+                      url:"/api/delete_list" ,
+                      data:data.id,
+                      success:function(res){
+                        if(res.code == 200){
+                          layer.msg("成功")
+                        }else{
+                          layer.msg(res.msg)
+                        }
+                      } ,
+                      fail:function(){
+                        layer.msg("请求失败")
+                      }
+                    })
+                    return false;
+              obj.del();
+              layer.close(index);
+            })
       }
     });
   });

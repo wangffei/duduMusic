@@ -38,3 +38,4 @@ Route::get('/song_list', "Api\AdminController@song_list1");
 Route::get('/add', "Api\AdminController@add1");
 Route::get('/delete', "Api\AdminController@delete1");
 Route::get('/update_count', "Api\AdminController@update_count1");
+Route::get('/delete_list', "Api\AdminController@delete_list1");
