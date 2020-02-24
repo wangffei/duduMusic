@@ -14,13 +14,11 @@
         let $ = layui.$;
         let url = "/api/my_music"
         $.post(url, function(result) {
-          // 不清楚数据结构，所以打印到控制台
-          console.log(result);
           // 穿梭框渲染返回的数据
           transfer.render({
             elem: '#amtl'                      // 绑定元素的ID
             ,title: ['可选歌曲', '已选歌曲']      // 自定义标题
-            ,data: data                        // 数据源
+            ,data: result.data                        // 数据源
             ,id: 'ID'                          // 标识符
             ,width: 450                        // 宽度
             ,height: 300                       // 高度
@@ -31,7 +29,7 @@
             }
             ,parseData: function(data) {
               return {
-                "value": data.value             // 数据值
+                "value": data.id             // 数据值
                 ,"title": data.song + '-' + data.singer + '-' + data.album    // 数据标题
                 ,"disabled": data.disabled      // 是否禁用
                 ,"checked": data.checked        // 是否选中

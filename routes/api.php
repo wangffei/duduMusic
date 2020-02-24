@@ -28,7 +28,8 @@ Route::get("/info", function (Request $request) {
 	return phpinfo();
 });
 Route::get('/userinfo/{username}', "Api\HelloController@getuserinfo");
-Route::post('/my_music', "Api\AdminController@data");
+Route::any('/my_music', "Api\AdminController@data");
+Route::any('/list_music/{id}', "Api\AdminController@list_music");
 Route::get('/login', "Api\AdminController@login1");
 Route::get('/register', "Api\AdminController@register1");
 Route::post('/upload', "Api\AdminController@upload_file1");

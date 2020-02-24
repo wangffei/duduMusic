@@ -192,4 +192,13 @@
 		copy($source , $dist) ;
 		//unlink($source);
 	}
+
+	public function list_music($id){
+		// 1.查询出非本歌单中的歌曲
+		$list_no = DB::select("select * from all_music where id not in (select music_id from album_music_list where album_id=$id)") ;
+		// 2.查询出本歌单中的歌曲
+		$list_yes = DB::select("select * from all_music where id in (select music_id from album_music_list where album_id=$id)") ;
+		$result = Array("code" => 200, "msg" => "成功",  "data" => Array("list_yes" => $list_yes , "list_no" => $list_no));
+		return response(json_encode($result)) -> header("Content-Type", "application/json");
+	}
  }
