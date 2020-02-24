@@ -29,7 +29,10 @@ Route::get("/info", function (Request $request) {
 });
 Route::get('/userinfo/{username}', "Api\HelloController@getuserinfo");
 Route::any('/my_music', "Api\AdminController@data");
+<<<<<<< HEAD
 Route::any('/list_music/{id}', "Api\AdminController@list_music");
+=======
+>>>>>>> 112832cfee77defd7c025e98aaa02270150b2ebe
 Route::get('/login', "Api\AdminController@login1");
 Route::get('/register', "Api\AdminController@register1");
 Route::post('/upload', "Api\AdminController@upload_file1");

@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="../layui/layui/css/layui.css" media="all">
 </head>
 <body>
-  <div id="amtl" class="mb-4 mt-5" style="margin-left: 400px;"></div>
+  <div id="amtl" class="mb-4 mt-5" style="margin-left: 100px;"></div>
   <script src="../layui/layui/layui.all.js" type="text/javascript" charset="UTF-8"></script>
   <script>
       layui.use(['transfer'], function() {
@@ -18,7 +18,11 @@
           transfer.render({
             elem: '#amtl'                      // 绑定元素的ID
             ,title: ['可选歌曲', '已选歌曲']      // 自定义标题
+<<<<<<< HEAD
             ,data: result.data                        // 数据源
+=======
+            ,data: result.data                 // 数据源
+>>>>>>> 112832cfee77defd7c025e98aaa02270150b2ebe
             ,id: 'ID'                          // 标识符
             ,width: 450                        // 宽度
             ,height: 300                       // 高度
@@ -28,6 +32,7 @@
               searchNone: '无匹配歌曲'           // 搜索无匹配数据时的文案
             }
             ,parseData: function(data) {
+              console.log(data);
               return {
                 "value": data.id             // 数据值
                 ,"title": data.song + '-' + data.singer + '-' + data.album    // 数据标题
