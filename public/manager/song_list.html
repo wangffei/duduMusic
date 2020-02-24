@@ -61,16 +61,16 @@
     table.on('toolbar(test)', function(obj){
       var checkStatus = table.checkStatus(obj.config.id);
       var data = checkStatus.data;    // 选中的数据
-      console.log(data[0].id);
+      //console.log(data[0].id);
       switch(obj.event){
         case 'add':
           //layer.msg('添加');
           location.href = "./create_list.html";
         break;
         case 'delete':
-          if(data.length === 0){
+          if(data.length === 0) {
             layer.msg("请选择一行");
-          } else{
+          }else if(data.length === 1) {
             layer.confirm('删除此歌单', function(index) {
               $.ajax({
                 url:"/api/delete_list" ,
@@ -89,6 +89,8 @@
               obj.del();
               layer.close(index);
             })
+          }else {
+            // 批量删除
           }
         break;
         case 'update':

@@ -257,6 +257,7 @@
 
 		if($id != null) {
 			$bool = DB::delete("delete from albums where id=?", [$id]);
+			$num = DB::delete("delete from album_music_list where album_id=?", [$id]);
 			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
