@@ -40,3 +40,4 @@ Route::get('/delete', "Api\AdminController@delete1");
 Route::get('/update_count', "Api\AdminController@update_count1");
 Route::get('/delete_list', "Api\AdminController@delete_list1");
 Route::get('/delete_lists', "Api\AdminController@delete_lists1");
+Route::get('/online_list', "Api\AdminController@online_list1");

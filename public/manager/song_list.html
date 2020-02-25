@@ -69,9 +69,15 @@
           layer.open({
             type: 1
             ,title: "请选择"
-            ,btn: ['添加网易云歌单', '添加本地歌单']
-            ,content: '<button type="button" class="layui-btn layui-btn-normal layui-btn-radius">添加网易云歌单</button><button type="button" class="layui-btn layui-btn-normal layui-btn-radius">添加本地歌单  </button>'
+            //,btn: ['添加网易云歌单', '添加本地歌单']
+            ,content: '<button type="button" class="layui-btn layui-btn-normal layui-btn-radius" id="online">添加网易云歌单</button><button type="button" class="layui-btn layui-btn-normal layui-btn-radius" id="local">添加本地歌单  </button>'
           });
+          $("#local").click(function(){
+            window.location = "./create_list.html";
+          })
+          $("#online").click(function(){
+            window.location = "./create_online_list.html";
+          })
         break;
         case 'delete':
           if(data.length === 0) {
