@@ -48,13 +48,53 @@
       ,cols: [[ //表头
         {type: 'checkbox', fixed: 'left'}
         ,{field: 'id', title: 'ID', width:80 , sort:true}
-        ,{field: 'name', title: '歌单名'}
+        ,{field: 'name', title: '歌单名', edit: 'text'}
         ,{field: 'flag', title: '类型' , templet:"#titleTpl"}
         ,{field: 'mid', title: '歌单mid'}
-        ,{field: 'img', title: '图片'}
+        ,{field: 'img', title: '图片', edit: 'text'}
         ,{field: 'count', title: '歌曲数量'}
         ,{fixed: 'right', title: '操作', width: 165, align:'center', toolbar: '#barDemo'}
       ]] 
+    });
+
+    // 监听单元格编辑
+    table.on('edit(test)', function(obj) {
+      var value = obj.value    // 得到修改后的值
+      ,data = obj.data         // 得到所在行所有键值
+      ,field = obj.field;      // 得到字段
+      if (field == 'name') {
+        $.ajax({
+          url: "/api/update_list_name"
+          ,data: {id: data.id, element: value}
+          ,success: function(res) {
+            if(res.code == 200) {
+              layer.msg('[ID: ' + data.id + ']' + field + ' 字段更改为：' + value);
+            }else {
+              layer.msg(res.msg)
+            }
+          },
+          ,fail: function() {
+            layer.msg("更新失败")
+          }
+        })
+      } else if(field == 'img') {
+        $.ajax({
+          url: "/api/update_list_img"
+          ,data: {id: data.id, element: value}
+          ,success: function(res) {
+            if(res.code == 200) {
+              layer.msg('[ID: ' + data.id + ']' + field + ' 字段更改为：' + value);
+            }else {
+              layer.msg(res.msg)
+            }
+          },
+          ,fail: function() {
+            layer.msg("更新失败")
+          }
+        })
+      } else {
+        layer.msg("项目有bug")
+      }
     });
 
     //头工具栏事件

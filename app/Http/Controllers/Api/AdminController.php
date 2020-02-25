@@ -337,4 +337,34 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
+
+	// 修改歌单名称
+	public function update_list_name1(Request $request) {
+		$id = $request -> input('id');          // 需要修改的歌单ID
+		$element = $request -> input('element');// 需要更新的值
+
+		if (is_null($id) || is_null($field) || is_null($element)) {
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		} else {
+			$bool = DB::update("update albums set name=? where id=?", ['$element', $id]);
+			$result = Array("code" => 200, "msg" => "更新成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 修改歌单封面
+	public function update_list_img1(Request $request) {
+		$id = $request -> input('id');          // 需要修改的歌单ID
+		$element = $request -> input('element');// 需要更新的值
+
+		if (is_null($id) || is_null($field) || is_null($element)) {
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		} else {
+			$bool = DB::update("update albums set img=? where id=?", ['$element', $id]);
+			$result = Array("code" => 200, "msg" => "更新成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
  }
