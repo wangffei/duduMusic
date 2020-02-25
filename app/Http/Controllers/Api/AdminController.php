@@ -193,15 +193,20 @@
 		// 需要提交的信息
 		$name = $request -> input("name");
 		$img_file = $request -> input("img_file");
+		$img_url = $request -> input("img_url");
 		$mid = $request -> input("mid");
 		$url = null;
 
-		if(is_null($img_file) || is_null($name) || is_null($mid)){
+		if(is_null($name) || is_null($mid)){
 			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 
-		// 如果是本地图片
+		if(is_null($img_file) && is_null($img_url)) {
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else if(is_null($img_url) && $img_file != null) {
+			// 如果是本地图片
 			// 获得移动后文件的地址并且移动文件
 			if (strrchr($img_file, '/'))
 			{
@@ -212,7 +217,7 @@
 			// 将所有数据写入数据库
 			if ($url != null)
 			{
-				$bool = DB::insert("insert into albums(name, img, flag, mid, count) values('$name', '$url', 0, $mid, 0)");
+				$bool = DB::insert("insert into albums(name, img, flag, mid) values('$name', '$url', 0, $mid)");
 				//var_dump($bool);
 				$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
 				return response(json_encode($result)) -> header("Content-Type", "application/json");
@@ -222,8 +227,15 @@
 				$result = Array("code" => 500, "msg" => "提交失败！", "count" => 1, "data" => "");
 				return response(json_encode($result)) -> header("Content-Type", "application/json");
 			}
-		// 如果是网络图片
-			#code...
+		}else if(is_null($img_file) && $img_url != null) {
+			// 如果是网络图片
+			$bool = DB::insert("insert into albums(name, img, flag, mid) values('$name', '$img_url', 0, $mid)");
+			$result = Array("code" => 200, "msg" => "提交成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "提交的参数有误！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
 	}
 
 	private function move($source , $dist){

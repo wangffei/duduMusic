@@ -29,6 +29,7 @@
       </div>
 
       <input id="img_file" type="hidden" name="img_file"/>
+      <input id="img_url" type="hidden" name="img_url"/>
 
       <div class="layui-form-item">
         <div class="layui-input-block">
@@ -58,7 +59,7 @@
         });
       });
       $("#list_img").click(function(){
-        layer.open({
+        var element = layer.open({
           type: 1
           ,title: "请选择"
           //,btn: ['添加网易云歌单', '添加本地歌单']
@@ -70,9 +71,27 @@
           }else{
             // 报错
           }
+          layer.close(element);
         })
         $("#online").click(function(){
-
+          layer.open({
+            type: 1
+            ,title: "请输入"
+            ,btn: ["确定", "取消"]
+            ,btnAlign: 'c'
+            ,content: '<div class="layui-form-item"><div class="layui-input-inline"><input type="text" name="url" required lay-verify="required" placeholder="请输入图片的网络地址" autocomplete="off" class="layui-input" id="url"></div></div>'
+            ,btn1: function(index, layero) {
+              var data = document.getElementById("url").value;
+              console.log(data);
+              if(data != null) {
+                $("#img_url").val(data);
+              }else {
+                // 未输入，需要重新输入
+              }
+              layer.close(index);
+            }
+          });
+          layer.close(element);
         })
       })
     </script>
