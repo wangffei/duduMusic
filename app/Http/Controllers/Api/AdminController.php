@@ -360,4 +360,36 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
+
+	// 删除歌曲
+	public function delete_music1(Request $request) {
+		$id = $request -> input('id');
+
+		if($id != null) {
+			$bool = DB::delete("delete from all_music where id=?", [$id]);
+			$num = DB::delete("delete from album_music_list where music_id=?", [$id]);
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 批量删除歌曲
+	public function delete_musics1(Request $request) {
+		$ids = $request -> input('ids');
+
+		if($ids != null) {
+			foreach ($ids as $value) {
+				$bool = DB::delete("delete from all_music where id=?", [$value]);
+				$num = DB::delete("delete from album_music_list where music_id=?", [$value]);
+			}
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
  }

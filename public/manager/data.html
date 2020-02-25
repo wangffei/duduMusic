@@ -17,6 +17,15 @@
   <body>
    
     <table id="demo" lay-filter="test"></table>
+
+    <script type="text/html" id="titleTpl">
+      {{d.local == '0' ? "本地歌曲" : "网易云歌曲"}}
+    </script>
+
+    <script type="text/html" id="barDemo">
+      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
      
     <script src="../layui/layui/layui.all.js"></script>
     <script>
@@ -37,10 +46,12 @@
         ,title: '用户数据表'
         ,cols: [[ //表头
           {type: 'checkbox', fixed: 'left'}
-          ,{field: 'id', title: 'ID', width:80}
+          ,{field: 'id', title: 'ID', width:80, sort: true}
           ,{field: 'song', title: '歌曲'}
+          ,{field: 'local', title: '类型', templet:"#titleTpl"}
           ,{field: 'album', title: '专辑'}
-          ,{field: 'singer', title: '歌手'} 
+          ,{field: 'singer', title: '歌手'}
+          ,{fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
         ]]
       });
 
@@ -50,13 +61,53 @@
         var data = checkStatus.data;    // 选中的数据
         switch(obj.event){
           case 'add':
-            layer.msg('添加');
+            // layer.msg('添加');
+            location.href = "./upload_music.html";
           break;
           case 'delete':
             if(data.length === 0){
               layer.msg("请选择一行");
-            } else{
-              layer.msg('删除');
+            } else if(data.length === 1) {
+              layer.confirm('删除此歌曲', function(index) {
+              $.ajax({
+                      url:"/api/delete_music" ,
+                      data:{id:data[0].id},
+                      success:function(res){
+                        if(res.code == 200){
+                          layer.msg("删除成功")
+                          location.reload();
+                        }else{
+                          layer.msg(res.msg)
+                        }
+                      } ,
+                      fail:function(){
+                        layer.msg("请求失败")
+                      }
+                    })
+                  })
+            } else {
+              // 批量删除
+              var ids = []
+              for(var i in data){
+                ids.push(data[i].id)
+              }
+              layer.confirm('删除所选歌曲', function(index) {
+                $.ajax({
+                  url: "/api/delete_musics",
+                  data: {ids: ids},
+                  success: function(res) {
+                    if(res.code == 200) {
+                      layer.msg("删除成功")
+                      location.reload();
+                    }else {
+                      layer.msg(res.msg)
+                    }
+                  },
+                  fail: function() {
+                    layer.msg("请求失败")
+                  }
+                })
+              })
             }
           break;
           case 'update':
@@ -69,6 +120,39 @@
             }
           break;
         };
+      });
+
+      // 监听行工具事件
+      table.on('tool(test)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'del') {
+          layer.confirm('真的删除歌曲么', function(index) {
+            $.ajax({
+                    url:"/api/delete_music",
+                    data:{id:data.id},
+                    success:function(res){
+                      if(res.code == 200){
+                        layer.msg("成功")
+                      }else{
+                        layer.msg(res.msg)
+                      }
+                    } ,
+                    fail:function(){
+                      layer.msg("请求失败")
+                    }
+                  })
+            obj.del();
+            layer.close(index);
+          })
+        } else if(obj.event === 'edit') {
+          if (data.local == 0) {
+
+          }else {
+            layer.msg('网易云歌曲无法进行编辑！');
+          }
+        } else {
+          layui.msg('操作失败');
+        }
       });  
     });
     </script>
