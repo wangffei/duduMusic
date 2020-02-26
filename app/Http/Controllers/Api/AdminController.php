@@ -411,4 +411,11 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
+
+	// 获取用户列表
+	public function all_users1() {
+		$user = DB::select("select * from users");
+		$result = Array("code" => 0, "msg" => "成功", "count" => 1, "data" => $user);
+		return response(json_encode($result)) -> header("Content-Type", "application/json");
+	}
 }

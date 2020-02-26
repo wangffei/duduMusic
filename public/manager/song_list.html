@@ -43,7 +43,7 @@
         statusCode: 200 //规定成功的状态码，默认：0
       } 
       ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-      ,totalRow: true //开启合计行
+      //,totalRow: true //开启合计行
       ,title: '用户数据表'
       ,cols: [[ //表头
         {type: 'checkbox', fixed: 'left'}
@@ -148,13 +148,7 @@
           //location.reload();
         break;
         case 'update':
-          if(data.length === 0){
-            layer.msg("请选择一行");
-          } else if(data.length > 1){
-            layer.msg("只能同时编辑一个");
-          } else{
-            layer.alert("编辑[id]:" + checkStatus.data[0].id);
-          }
+          layer.alert("直接点击单元格进行对歌单名和图片地址的修改！<br>其他部分不能修改！<br>新增歌单请选择左侧'+'按钮！");
         break;
       };
     });
