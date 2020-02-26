@@ -64,13 +64,75 @@
         var data = checkStatus.data;    // 选中的数据
         switch(obj.event){
           case 'add':
-            layer.msg('添加');
+            //layer.msg('添加');
+            location.href = "./add_user.html";
           break;
           case 'delete':
+            //console.log(data);
             if(data.length === 0) {
               layer.msg("请选择一行");
-            } else {
-              layer.msg("删除");
+            }else if(data.length === 1) {
+              //console.log(data);
+              if (data[0].role == 1) {
+                layer.confirm('删除用户', function(index) {
+                  $.ajax({
+                          url:"/api/delete_user",
+                          data:{id: data[0].id, username: data[0].user},
+                          success:function(res){
+                            if(res.code == 200){
+                              layer.msg("成功")
+                              location.reload();
+                            }else{
+                              layer.msg(res.msg)
+                            }
+                          } ,
+                          fail:function(){
+                            layer.msg("请求失败")
+                          }
+                        })
+                })
+              }else if(data[0].role == 0){
+                //console.log(data);
+                layer.msg('禁止删除管理员信息！！！');
+              } else {
+                layer.msg('用户身份未知');
+              }
+            }else {
+              //console.log(data);
+              //layer.msg("删除");
+              // 批量删除
+              var ids = []
+              for(var i in data){
+                ids.push(data[i].id)
+              }
+              var usernames = []
+              for(var i in data){
+                usernames.push(data[i].user)
+              }
+              if (data[0].role == 1) {
+                layer.confirm('删除所选用户', function(index) {
+                  $.ajax({
+                    url: "/api/delete_users",
+                    data: {ids: ids, usernames: usernames},
+                    success: function(res) {
+                      if(res.code == 200) {
+                        layer.msg("删除成功")
+                        location.reload();
+                      }else {
+                        layer.msg(res.msg)
+                      }
+                    },
+                    fail: function() {
+                      layer.msg("请求失败")
+                    }
+                  })
+                })
+              }else if(data[0].role == 0){
+                //console.log(data);
+                layer.msg('禁止删除管理员信息！！！');
+              } else {
+                layer.msg('用户身份未知');
+              }
             }
           break;
           case 'update':
@@ -91,9 +153,9 @@
         if (obj.event === 'del') {
           if (data.role == 1) {
             layer.confirm('删除用户', function(index) {
-              /*$.ajax({
-                      url:"/api/delete_music",
-                      data:{id:data.id},
+              $.ajax({
+                      url:"/api/delete_user",
+                      data:{id: data.id, username: data.user},
                       success:function(res){
                         if(res.code == 200){
                           layer.msg("成功")
@@ -104,7 +166,7 @@
                       fail:function(){
                         layer.msg("请求失败")
                       }
-                    })*/
+                    })
               obj.del();
               layer.close(index);
             })

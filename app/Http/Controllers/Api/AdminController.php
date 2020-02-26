@@ -40,19 +40,19 @@
 	// 注册
 	public function register1(Request $request)
 	{
-		$username = $request -> input("username");
-		$password = $request -> input("password");
+		$user = $request -> input("user");
+		$pwd = $request -> input("pwd");
 		$name = $request -> input("name");
 		$gender = $request -> input("gender");
 		$addr = $request -> input("addr");
 		$birth = $request -> input("birth");
 
 		$result = null ;
-		if (is_null($username))
+		if (is_null($user))
 		{
 			$result = Array("code" => 500, "msg" => "用户名不能为空!!!", "count" => 1, "data" => "");
 		}
-		if (is_null($password))
+		if (is_null($pwd))
 		{
 			$result = Array("code" => 500, "msg" => "密码不能为空!!!", "count" => 1, "data" => "");
 		}
@@ -66,7 +66,7 @@
 		}
 		else
 		{
-			$bool = DB::insert("insert into users(user, pwd, name, gender, addr, birth) values('$username', '$password', '$name', '$gender', '$addr', $birth)");
+			$bool = DB::insert("insert into users(user, pwd, name, gender, addr, birth) values('$user', '$pwd', '$name', '$gender', '$addr', '$birth')");
 			//var_dump($bool);
 			$result = Array("code" => 200, "msg" => "注册成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
@@ -417,5 +417,41 @@
 		$user = DB::select("select * from users");
 		$result = Array("code" => 0, "msg" => "成功", "count" => 1, "data" => $user);
 		return response(json_encode($result)) -> header("Content-Type", "application/json");
+	}
+
+	// 删除用户
+	public function delete_user1(Request $request) {
+		$id = $request -> input('id');
+		$username = $request -> input('username');
+
+		if($id != null && $username != null) {
+			$bool = DB::delete("delete from users where id=?", [$id]);
+			$num = DB::delete("delete from user_music where username=?", [$username]);
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 批量删除用户
+	public function delete_users1(Request $request) {
+		$ids = $request -> input('ids');
+		$usernames = $request -> input('usernames');
+
+		if($ids != null && $usernames != null) {
+			foreach ($ids as $value) {
+				$bool = DB::delete("delete from users where id=?", [$value]);
+			}
+			foreach ($usernames as $value) {
+				$num = DB::delete("delete from user_music where username=?", [$value]);
+			}
+			$result = Array("code" => 200, "msg" => "删除成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}else {
+			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
 	}
 }
