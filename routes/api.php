@@ -48,3 +48,4 @@ Route::get('/update_music', "Api\AdminController@update_music1");
 Route::get('/all_users', "Api\AdminController@all_users1");
 Route::get('/delete_user', "Api\AdminController@delete_user1");
 Route::get('/delete_users', "Api\AdminController@delete_users1");
+Route::get('/update_user', "Api\AdminController@update_user1");

@@ -179,15 +179,15 @@
         } else if(obj.event === 'edit') {
           if (data.role == 1) {
             // console.log(data);
-            /*layer.open({
+            layer.open({
               type: 1
-              ,title: "修改歌曲信息"
-              ,area: ['30%', '360px']
+              ,title: "修改用户信息"
+              ,area: ['30%', '520px']
               ,content: $("#popUpdateTest").html()
-              ,offset: '100px'
+              ,offset: '50px'
             });
-            setFormValue(data);*/
-            layer.msg('修改用户信息');
+            setFormValue(data);
+            //layer.msg('修改用户信息');
           }else if(data.role == 0){
             //console.log(data);
             layer.msg('禁止修改管理员信息！！！');
@@ -200,21 +200,24 @@
       });
 
       // 动态向表单赋值
-      /*function setFormValue(data) {
+      function setFormValue(data) {
         popForm.val("formTestFilter", {
           "id": data.id
-          , "song": data.song
-          , "singer": data.singer
-          , "album": data.album
+          , "user": data.user
+          , "pwd": data.pwd
+          , "name": data.name
+          , "gender": data.gender
+          , "addr": data.addr
+          , "birth": data.birth
         });
         popForm.render(null, 'formTestFilter')
       }
       
       //监听提交
       popForm.on('submit(formDemo)', function(data){
-        console.log(data.field);
+        //console.log(data.field);
         $.ajax({
-          url:"/api/update_music" ,
+          url:"/api/update_user" ,
           data:data.field ,
           success:function(res){
             if(res.code == 200){
@@ -229,12 +232,12 @@
           }
         })
         return false;
-      });*/
+      });
     });
     </script>
 
     <!-- 需要弹出的修改和添加员工界面 -->
-   <!-- <div class="layui-row" id="popUpdateTest" style="display:none; margin-top: -300px;margin-bottom: 100px;">
+   <div class="layui-row" id="popUpdateTest" style="display:none; margin-top: -300px;margin-bottom: 100px;">
         <div class="layui-col-md10">
             <form class="layui-form" lay-filter="formTestFilter" id="addAndUpdateEmployeeForm">
               <div class="layui-form-item">
@@ -247,22 +250,41 @@
                   </div>
               </div>
               <div class="layui-form-item">
-                  <label class="layui-form-label">歌名：</label>
+                  <label class="layui-form-label">用户名：</label>
                   <div class="layui-input-inline">
-                      <input type="text" name="song" class="layui-input">
+                      <input type="text" name="user" class="layui-input">
                   </div>
               </div>
               <div class="layui-form-item">
-                  <label class="layui-form-label">专辑：</label>
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-inline">
+                  <input type="password" name="pwd" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">真实姓名：</label>
                   <div class="layui-input-inline">
-                      <input type="text" name="album" class="layui-input">
+                      <input type="text" name="name" class="layui-input">
                   </div>
               </div>
               <div class="layui-form-item">
-                  <label class="layui-form-label">歌手：</label>
+                <label class="layui-form-label">性别：</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="gender" value=1 title="男" class="layui-input">
+                  <input type="radio" name="gender" value=0 title="女" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">地址：</label>
                   <div class="layui-input-inline">
-                      <input type="text" name="singer" class="layui-input">
+                      <input type="text" name="addr" class="layui-input">
                   </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">出生日期：</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="birth" class="layui-input">
+                </div>
               </div>
               <div class="layui-form-item">
                   <div class="layui-input-block">
@@ -272,6 +294,6 @@
               </div>
             </form>
         </div>
-    </div> !-->
+    </div>
   </body>
 </html>

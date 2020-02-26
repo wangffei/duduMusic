@@ -404,9 +404,9 @@
 			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		} else {
-			$bool = DB::update("update all_music set song=? where id=?", [$song, $id]);
-			$bool = DB::update("update all_music set album=? where id=?", [$album, $id]);
-			$bool = DB::update("update all_music set singer=? where id=?", [$singer, $id]);
+			$bool1 = DB::update("update all_music set song=? where id=?", [$song, $id]);
+			$bool2 = DB::update("update all_music set album=? where id=?", [$album, $id]);
+			$bool3 = DB::update("update all_music set singer=? where id=?", [$singer, $id]);
 			$result = Array("code" => 200, "msg" => "更新成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
@@ -451,6 +451,31 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}else {
 			$result = Array("code" => 500, "msg" => "删除失败！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+
+	// 修改用户信息
+	public function update_user1(Request $request) {
+		$id = $request -> input('id');
+		$user = $request -> input('user');
+		$pwd = $request -> input('pwd');
+		$name = $request -> input('name');
+		$gender = $request -> input('gender');
+		$addr = $request -> input('addr');
+		$birth = $request -> input('birth');
+
+		if (is_null($user) || is_null($pwd) || is_null($name) || is_null($id)) {
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		} else {
+			$bool1 = DB::update("update users set user=? where id=?", [$user, $id]);
+			$bool2 = DB::update("update users set pwd=? where id=?", [$pwd, $id]);
+			$bool3 = DB::update("update users set name=? where id=?", [$name, $id]);
+			$bool4 = DB::update("update users set gender=? where id=?", [$gender, $id]);
+			$bool5 = DB::update("update users set addr=? where id=?", [$addr, $id]);
+			$bool6 = DB::update("update users set birth=? where id=?", [$birth, $id]);
+			$result = Array("code" => 200, "msg" => "更新成功！", "count" => 1, "data" => "");
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
