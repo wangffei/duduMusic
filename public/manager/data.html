@@ -31,8 +31,9 @@
     <script>
     var $ = layui.jquery ;
     var height = $(document).height()
-    layui.use('table', function(){
+    layui.use(['table','form'], function(){
       var table = layui.table;
+      var popForm = layui.form;
       
       //第一个实例
       table.render({
@@ -146,15 +147,97 @@
           })
         } else if(obj.event === 'edit') {
           if (data.local == 0) {
-
+            // console.log(data);
+            layer.open({
+              type: 1
+              ,title: "修改歌曲信息"
+              ,area: ['30%', '360px']
+              ,content: $("#popUpdateTest").html()
+              ,offset: '100px'
+            });
+            setFormValue(data);
           }else {
+            //console.log(data);
             layer.msg('网易云歌曲无法进行编辑！');
           }
         } else {
           layui.msg('操作失败');
         }
-      });  
+      });
+
+      // 动态向表单赋值
+      function setFormValue(data) {
+        popForm.val("formTestFilter", {
+          "id": data.id
+          , "song": data.song
+          , "singer": data.singer
+          , "album": data.album
+        });
+        popForm.render(null, 'formTestFilter')
+      }
+      
+      //监听提交
+      popForm.on('submit(formDemo)', function(data){
+        console.log(data.field);
+        $.ajax({
+          url:"/api/update_music" ,
+          data:data.field ,
+          success:function(res){
+            if(res.code == 200){
+              layer.msg("成功")
+              location.reload();
+            }else{
+              layer.msg(res.msg)
+            }
+          } ,
+          fail:function(){
+            layer.msg("请求失败")
+          }
+        })
+        return false;
+      });
     });
     </script>
+
+    <!-- 需要弹出的修改和添加员工界面 -->
+    <div class="layui-row" id="popUpdateTest" style="display:none; margin-top: -300px;margin-bottom: 100px;">
+        <div class="layui-col-md10">
+            <form class="layui-form" lay-filter="formTestFilter" id="addAndUpdateEmployeeForm">
+              <div class="layui-form-item">
+                  <label class="layui-form-label"></label>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">ID：</label>
+                  <div class="layui-input-inline">
+                      <input type="text" name="id" class="layui-input" disabled="disabled">
+                  </div>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">歌名：</label>
+                  <div class="layui-input-inline">
+                      <input type="text" name="song" class="layui-input">
+                  </div>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">专辑：</label>
+                  <div class="layui-input-inline">
+                      <input type="text" name="album" class="layui-input">
+                  </div>
+              </div>
+              <div class="layui-form-item">
+                  <label class="layui-form-label">歌手：</label>
+                  <div class="layui-input-inline">
+                      <input type="text" name="singer" class="layui-input">
+                  </div>
+              </div>
+              <div class="layui-form-item">
+                  <div class="layui-input-block">
+                      <button type="button" id="updateRole" class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">提交</button>
+                      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+              </div>
+            </form>
+        </div>
+    </div>
   </body>
 </html>

@@ -44,3 +44,4 @@ Route::get('/online_list', "Api\AdminController@online_list1");
 Route::get('/update_list', "Api\AdminController@update_list1");
 Route::get('/delete_music', "Api\AdminController@delete_music1");
 Route::get('/delete_musics', "Api\AdminController@delete_musics1");
+Route::get('/update_music', "Api\AdminController@update_music1");

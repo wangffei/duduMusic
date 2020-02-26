@@ -392,4 +392,23 @@
 			return response(json_encode($result)) -> header("Content-Type", "application/json");
 		}
 	}
- }
+
+	// 修改歌曲信息
+	public function update_music1(Request $request) {
+		$id = $request -> input('id');
+		$song = $request -> input('song');
+		$album = $request -> input('album');
+		$singer = $request -> input('singer');
+
+		if (is_null($song) || is_null($album) || is_null($singer) || is_null($id)) {
+			$result = Array("code" => 500, "msg" => "参数不完整", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		} else {
+			$bool = DB::update("update all_music set song=? where id=?", [$song, $id]);
+			$bool = DB::update("update all_music set album=? where id=?", [$album, $id]);
+			$bool = DB::update("update all_music set singer=? where id=?", [$singer, $id]);
+			$result = Array("code" => 200, "msg" => "更新成功！", "count" => 1, "data" => "");
+			return response(json_encode($result)) -> header("Content-Type", "application/json");
+		}
+	}
+}
